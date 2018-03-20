@@ -75,17 +75,10 @@ int main() {
             }
 
         }
-
-
-        //while (is)
-            //std::cout << char(is.get());
         fb.close();
     }
 
-    cout <<"\n The gates are \n";
-    for(std::vector<string>::iterator it = gates.begin(); it != gates.end(); ++it) {
-        cout<<*it<<"\n";
-    }
+
     return 0;
 
 }
