@@ -6,8 +6,11 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include "starter.h"
 
+vector<Node> nodes;
 using namespace std;
+
 void parsing() {
    
    filebuf fb;
@@ -21,6 +24,7 @@ void parsing() {
    vector<string> gates;
    string temp;
    char tempchar[100];
+  
 
    if (fb.open ("./s9234.blif",std::ios::in))
    {
@@ -36,16 +40,34 @@ void parsing() {
       is >> temp;
       while (temp != ".outputs")
       {
-         if (temp != "\\")
-            inputs.push_back(temp);
+		  if (temp != "\\")
+		  {
+			  Node a;
+			  a.name = temp;
+			  a.is_PI = true;
+			  a.is_PO = false;
+			  a.label = 1;
+			  a.cluster.insert(a.name);
+			  nodes.push_back(a);
+		  }
+           // inputs.push_back(temp);
          is>>temp;
       }
       
       is >> temp;
       while (temp[0] != '.')
       {
-         if (temp != "\\")
-            outputs.push_back(temp);
+		  if (temp != "\\")
+		  {
+			  Node a;
+			  a.name = temp;
+			  a.is_PI = false;
+			  a.is_PO = true;
+			  //a.label = 1;
+			  //a.cluster.insert(a.name);
+			  nodes.push_back(a);
+		 }
+            //outputs.push_back(temp);
          is>>temp;
       }
       
@@ -66,7 +88,16 @@ void parsing() {
             {
                is.getline(&tempchar[0],500);
                temp = tempchar;
-               gates.push_back(temp);
+			   unsigned int len = temp.length();
+               //gates.push_back(temp);
+			   unsigned int pos = temp.find_last_of(' ');
+
+			   std::stringstream ss(s);
+			   std::string item;
+			   while (std::getline(ss, item, delim)) {
+				   *(result++) = item;
+			   }
+			   if 
             }
          
             else
