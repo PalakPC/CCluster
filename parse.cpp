@@ -4,28 +4,21 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
+#include <algorithm>
 #include "starter.h"
 
-vector<Node> nodes;
-using namespace std;
 
-void parsing() {
-   
+void parsing() 
+{   
    filebuf fb;
 
-   //std::vector<std::array<char, 4>> v;
-   char a[100];
-   vector<string> inputs;
-   vector<string> outputs;
    vector<string> latch_inputs;
    vector<string> latch_outputs;
-   vector<string> gates;
+   
    string temp;
+   
    char tempchar[100];
   
-
    if (fb.open ("./s9234.blif",std::ios::in))
    {
       istream is(&fb);
@@ -50,8 +43,8 @@ void parsing() {
 			  a.cluster.insert(a.name);
 			  nodes.push_back(a);
 		  }
-           // inputs.push_back(temp);
-         is>>temp;
+        PIs.push_back(temp);
+        is>>temp;
       }
       
       is >> temp;
@@ -67,7 +60,7 @@ void parsing() {
 			  //a.cluster.insert(a.name);
 			  nodes.push_back(a);
 		 }
-            //outputs.push_back(temp);
+         POs.push_back(temp);
          is>>temp;
       }
       
@@ -88,9 +81,31 @@ void parsing() {
             {
                is.getline(&tempchar[0],500);
                temp = tempchar;
-			   unsigned int len = temp.length();
-               //gates.push_back(temp);
-			   unsigned int pos = temp.find_last_of(' ');
+               unsigned int len = temp.length();
+               unsigned int pos = temp.find_last_of(' ');
+               unsigned int midpos;
+
+               std::string output = temp.substr(pos+1, len);
+               std::string delimiter = ' ';
+               std::string token;
+               while ((midpos = temp.find(delimiter)) != std::string::npos)
+               {
+                  token = temp.substr(0, pos);
+                  temp.erase(0, pos + delimiter.length());
+               }
+               std::cout << s << std::endl;
+               if (find(POs.begin(), POs.end(), output) != POs.end())
+               {
+                  Node a;
+                  a.name = output;
+                  a.is_PI = false;
+                  a.is_PO = false;
+                  //a.label = 1;
+                  //a.cluster.insert(a.name);
+                  nodes.push_back(a);
+               }
+
+
 
 			   std::stringstream ss(s);
 			   std::string item;

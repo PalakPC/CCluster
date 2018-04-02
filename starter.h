@@ -20,4 +20,7 @@ struct Node
 
 unordered_map<string, unordered_map<string, value>> matrix;
 
+unordered_map<string, Node> nodes;
+vector<string> PIs;
+vetcor<string> POs;
 
