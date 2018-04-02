@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/palak/spring2018/pda/ram_wong_clustering/main.cpp
+iostream
+-
+starter.h
+/home/palak/spring2018/pda/ram_wong_clustering/starter.h
+
+/home/palak/spring2018/pda/ram_wong_clustering/parse.cpp
+iostream
+-
+fstream
+-
+algorithm
+-
+starter.h
+/home/palak/spring2018/pda/ram_wong_clustering/starter.h
+
+/home/palak/spring2018/pda/ram_wong_clustering/starter.cpp
+iostream
+-
+starter.h
+/home/palak/spring2018/pda/ram_wong_clustering/starter.h
+
+/home/palak/spring2018/pda/ram_wong_clustering/starter.h
+string
+-
+vector
+-
+unordered_map
+-
+

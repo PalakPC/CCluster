@@ -1,18 +1,33 @@
-/*
- * Initial code
- */
+# include <iostream>
+# include "starter.h"
 
-# include <string>
+std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
 
-struct Node
+std::unordered_map<std::string, Node> nodes;
+std::vector<std::string> actual_inputs;
+std::vector<std::string> PIs;
+std::vector<std::string> POs;
+
+unsigned int total_nodes;
+
+void Node::print_node()
 {
-   std::string name;
-   unsigned int label;
-   unordered_set input;
-   unordered_set output;
-   unordered_set <string> cluster;
-};
+   std::cout << "name: " << name << '\n';
+   std::cout << "label: " << label << '\n';
+   std::cout << "is_PI: " << is_PI << '\n';
+   std::cout << "is_PO: " << is_PO << '\n';
 
-unordered_map<string, unordered_map<string, value>> matrix;
+   std::cout << "Inputs\n";
+   for (auto i = input.begin(); i != input.end(); ++i)
+      std::cout << *i << '\n';
 
+   std::cout << "Outputs\n";
+   for (auto i = output.begin(); i != output.end(); ++i)
+      std::cout << *i << '\n';
+   
+   std::cout << "Cluster\n";
+   for (auto i = cluster.begin(); i != cluster.end(); ++i)
+      std::cout << *i << '\n';
 
+   std::cout << "\n";
+}

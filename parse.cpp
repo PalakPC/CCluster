@@ -9,61 +9,63 @@
 
 
 void parsing() 
-{   
-   filebuf fb;
+{ 
+   std::filebuf fb;
 
-   vector<string> latch_inputs;
-   vector<string> latch_outputs;
-   
-   string temp;
-   
-   char tempchar[100];
-  
-   if (fb.open ("./s9234.blif",std::ios::in))
+   std::vector<std::string> latch_inputs;
+   std::vector<std::string> latch_outputs;
+
+   std::string temp;
+   total_nodes = 0;
+
+   std::string tempchar;
+
+   if (fb.open ("./sample.blif",std::ios::in))
    {
-      istream is(&fb);
+      std::istream is(&fb);
 
       is >> temp;
       while (temp != "inputs")
       {
-         is.ignore(200, '.');
+         is.ignore(256, '.');
          is >> temp;
       }
-   
+
       is >> temp;
       while (temp != ".outputs")
       {
-		  if (temp != "\\")
-		  {
-			  Node a;
-			  a.name = temp;
-			  a.is_PI = true;
-			  a.is_PO = false;
-			  a.label = 1;
-			  a.cluster.insert(a.name);
-			  nodes.push_back(a);
-		  }
-        PIs.push_back(temp);
-        is>>temp;
+         if (temp != "\\")
+         {
+/*            Node a;
+            a.name = temp;
+            a.is_PI = true;
+            a.is_PO = false;
+            a.label = 1;
+            a.input.clear();
+            a.cluster.push_back(a.name);
+            nodes.insert(std::make_pair(temp, a));
+*/         }
+         actual_inputs.push_back(temp);
+//         total_nodes++;
+         is>>temp;
       }
-      
+
       is >> temp;
       while (temp[0] != '.')
       {
-		  if (temp != "\\")
-		  {
-			  Node a;
-			  a.name = temp;
-			  a.is_PI = false;
-			  a.is_PO = true;
-			  //a.label = 1;
-			  //a.cluster.insert(a.name);
-			  nodes.push_back(a);
-		 }
+         if (temp != "\\")
+         {
+            Node a;
+            a.name = temp;
+            a.is_PO = true;
+            a.cluster.push_back(a.name);
+            nodes.insert(std::make_pair(temp, a));
+         }
          POs.push_back(temp);
+         total_nodes++;
          is>>temp;
       }
-      
+
       while (1)
       {
          if (temp == ".latch")
@@ -74,47 +76,81 @@ void parsing()
             latch_outputs.push_back(temp);
             is.ignore(300,'\n');
          }
-      
+
          else
          {
             if (temp == ".names")
             {
-               is.getline(&tempchar[0],500);
-               temp = tempchar;
+               getline(is, temp);
                unsigned int len = temp.length();
                unsigned int pos = temp.find_last_of(' ');
                unsigned int midpos;
 
                std::string output = temp.substr(pos+1, len);
-               std::string delimiter = ' ';
+               std::string delimiter = " ";
                std::string token;
-               while ((midpos = temp.find(delimiter)) != std::string::npos)
+               std::vector<std::string> inputs;
+
+               unsigned int start = 0;
+
+               while ((midpos = temp.find(delimiter, start)) < pos)
                {
-                  token = temp.substr(0, pos);
-                  temp.erase(0, pos + delimiter.length());
+                  
+                  token = temp.substr(start, midpos - start);
+                  inputs.push_back(token);
+                  start = midpos + 1;
                }
-               std::cout << s << std::endl;
-               if (find(POs.begin(), POs.end(), output) != POs.end())
+
+               bool ai = true;
+
+               std::cout << "I work till line 104" << std::endl;
+               for (auto i = inputs.begin(); i != inputs.end(); ++i)
+               {
+                  if (std::find(actual_inputs.begin(), actual_inputs.end(), *i) != actual_inputs.end() == false)
+                  {
+                     ai = false;
+
+                     auto got = nodes.find(*i);
+
+                     if (got != nodes.end())
+                     {
+                        got->second.output.push_back(output);
+                     }
+
+                     else
+                     {
+                        Node a;
+                        a.name = token;
+                        a.output.push_back(output);
+                        a.cluster.push_back(a.name);
+                        nodes.insert(std::make_pair(temp, a));
+                        total_nodes++;
+                     }
+                  }
+               }
+
+               if (ai)
+               {
+                  PIs.push_back(output);
+               }
+
+               auto got = nodes.find(output);
+
+               if (got != nodes.end())
+               {
+                  got->second.input = inputs;
+               }
+
+               else
                {
                   Node a;
                   a.name = output;
-                  a.is_PI = false;
-                  a.is_PO = false;
-                  //a.label = 1;
-                  //a.cluster.insert(a.name);
-                  nodes.push_back(a);
+                  a.input = inputs;
+                  a.cluster.push_back(a.name);
+                  nodes.insert(std::make_pair(temp, a));
+                  total_nodes++;
                }
-
-
-
-			   std::stringstream ss(s);
-			   std::string item;
-			   while (std::getline(ss, item, delim)) {
-				   *(result++) = item;
-			   }
-			   if 
-            }
-         
+            } 
             else
             {
                if (temp == ".end")
@@ -125,11 +161,8 @@ void parsing()
                   while (temp[0]!='.')
                      is>>temp;
                }
-
-
             }
          }
-
       }
       fb.close();
    }
