@@ -34,19 +34,7 @@ void parsing()
       is >> temp;
       while (temp != ".outputs")
       {
-         if (temp != "\\")
-         {
-/*            Node a;
-            a.name = temp;
-            a.is_PI = true;
-            a.is_PO = false;
-            a.label = 1;
-            a.input.clear();
-            a.cluster.push_back(a.name);
-            nodes.insert(std::make_pair(temp, a));
-*/         }
          actual_inputs.push_back(temp);
-//         total_nodes++;
          is>>temp;
       }
 
@@ -59,10 +47,10 @@ void parsing()
             a.name = temp;
             a.is_PO = true;
             a.cluster.push_back(a.name);
-            nodes.insert(std::make_pair(temp, a));
+            nodes.insert(std::make_pair(a.name, a));
+            POs.push_back(temp);
+            total_nodes++;
          }
-         POs.push_back(temp);
-         total_nodes++;
          is>>temp;
       }
 
@@ -82,11 +70,12 @@ void parsing()
             if (temp == ".names")
             {
                getline(is, temp);
+
                unsigned int len = temp.size();
                unsigned int pos = temp.find_last_of(' ');
                unsigned int midpos;
 
-               std::string output = temp.substr(pos+1, len);
+               std::string output = temp.substr(pos+1, len - pos - 2);
                std::string delimiter = " ";
                std::string token;
                std::vector<std::string> inputs;
@@ -100,11 +89,11 @@ void parsing()
                   start = midpos + 1;
                }
 
-               bool ai = true;
+               bool ai = true; 
 
                for (auto i = inputs.begin(); i != inputs.end(); ++i)
                {
-                  if (std::find(actual_inputs.begin(), actual_inputs.end(), *i) != actual_inputs.end() == false)
+                  if (std::find(actual_inputs.begin(), actual_inputs.end(), *i) == actual_inputs.end())
                   {
                      ai = false;
 
@@ -118,10 +107,10 @@ void parsing()
                      else
                      {
                         Node a;
-                        a.name = token;
+                        a.name = *i;
                         a.output.push_back(output);
                         a.cluster.push_back(a.name);
-                        nodes.insert(std::make_pair(token, a));
+                        nodes.emplace(std::make_pair(a.name, a));
                         total_nodes++;
                      }
                   }
@@ -143,9 +132,13 @@ void parsing()
                {
                   Node a;
                   a.name = output;
+                  if (ai)
+                  {
+                     a.is_PI = true;
+                  }
                   a.input = inputs;
                   a.cluster.push_back(a.name);
-                  nodes.insert(std::make_pair(output, a));
+                  nodes.emplace(std::make_pair(a.name, a));
                   total_nodes++;
                }
             } 
@@ -162,6 +155,7 @@ void parsing()
             }
          }
       }
+
       fb.close();
    }
 

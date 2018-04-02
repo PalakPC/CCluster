@@ -1,0 +1,181 @@
+ in1 a
+alk
+ in2 in1 b
+balk
+ in3 c
+cklab
+ a b d
+ckdlab
+ b c e
+ckdlaeb
+ a f
+fckdlaeb
+ e g
+gfckdlaeb
+ c h
+hgfckdlaeb
+ f d g i
+ibelkcafgdh
+ g h j
+ibejlkcafgdh
+ i j k
+ibejlkcafgdh
+ j h l
+ibejlkcafgdh
+Actual Inputs
+in1
+in2
+in3
+in4
+Primary Inputs
+a
+b
+c
+Primary Outputs
+k
+l
+name: i
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+f
+d
+g
+Outputs
+k
+Cluster
+i
+
+name: b
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+in2
+in1
+Outputs
+d
+e
+Cluster
+b
+
+name: e
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+b
+c
+Outputs
+g
+Cluster
+e
+
+name: j
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+g
+h
+Outputs
+k
+l
+Cluster
+j
+
+name: l
+label: 0
+is_PI: 0
+is_PO: 1
+Inputs
+j
+h
+Outputs
+Cluster
+l
+
+name: k
+label: 0
+is_PI: 0
+is_PO: 1
+Inputs
+i
+j
+Outputs
+Cluster
+k
+
+name: c
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+in3
+Outputs
+e
+h
+Cluster
+c
+
+name: a
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+in1
+Outputs
+d
+f
+Cluster
+a
+
+name: f
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+a
+Outputs
+i
+Cluster
+f
+
+name: g
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+e
+Outputs
+i
+j
+Cluster
+g
+
+name: d
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+a
+b
+Outputs
+i
+Cluster
+d
+
+name: h
+label: 0
+is_PI: 0
+is_PO: 0
+Inputs
+c
+Outputs
+j
+l
+Cluster
+h
+
+Total number of nodes: 12
