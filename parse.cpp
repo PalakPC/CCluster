@@ -91,8 +91,6 @@ void parsing()
                std::string token;
                std::vector<std::string> inputs;
 
-               std::cout << temp << std::endl;
-
                unsigned int start = 1;
 
                while ((midpos = temp.find(delimiter, start)) <= pos)
@@ -110,25 +108,20 @@ void parsing()
                   {
                      ai = false;
 
-                     for (auto it = nodes.begin(); it != nodes.end(); ++it)
-                        std::cout << it->first << std::endl;
-
                      auto got = nodes.find(*i);
 
                      if (got != nodes.end())
                      {
-                        std::cout << "please print";
                         got->second.output.push_back(output);
                      }
 
                      else
                      {
-                        std::cout << "making node for " << *i <<std::endl;
                         Node a;
                         a.name = token;
                         a.output.push_back(output);
                         a.cluster.push_back(a.name);
-                        nodes.insert(std::make_pair(temp, a));
+                        nodes.insert(std::make_pair(token, a));
                         total_nodes++;
                      }
                   }
@@ -148,12 +141,11 @@ void parsing()
 
                else
                {
-                  std::cout << "making node for " << output <<std::endl;
                   Node a;
                   a.name = output;
                   a.input = inputs;
                   a.cluster.push_back(a.name);
-                  nodes.insert(std::make_pair(temp, a));
+                  nodes.insert(std::make_pair(output, a));
                   total_nodes++;
                }
             } 

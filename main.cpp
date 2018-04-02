@@ -22,9 +22,9 @@ int main()
       std::cout << *i << '\n';
 
    for (auto it = nodes.begin(); it != nodes.end(); ++it)
-//      it->second.print_node();
+      it->second.print_node();
 
-//   std::cout << "Total number of nodes: " << total_nodes << "\n";
+   std::cout << "Total number of nodes: " << total_nodes << "\n";
    return 0;
 }
 
