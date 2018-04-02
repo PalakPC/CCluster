@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ram_wong_clustering.dir/main.cpp.o"
   "CMakeFiles/ram_wong_clustering.dir/parse.cpp.o"
-  "CMakeFiles/ram_wong_clustering.dir/starter.cpp.o"
+  "CMakeFiles/ram_wong_clustering.dir/node.cpp.o"
   "ram_wong_clustering.pdb"
   "ram_wong_clustering"
 )

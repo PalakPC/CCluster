@@ -5,8 +5,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/palak/spring2018/pda/ram_wong_clustering/main.cpp" "/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/ram_wong_clustering.dir/main.cpp.o"
+  "/home/palak/spring2018/pda/ram_wong_clustering/node.cpp" "/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/ram_wong_clustering.dir/node.cpp.o"
   "/home/palak/spring2018/pda/ram_wong_clustering/parse.cpp" "/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/ram_wong_clustering.dir/parse.cpp.o"
-  "/home/palak/spring2018/pda/ram_wong_clustering/starter.cpp" "/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/ram_wong_clustering.dir/starter.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

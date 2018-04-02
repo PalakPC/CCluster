@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include "starter.h"
+#include "node.h"
 
 
 void parsing() 
@@ -82,7 +82,7 @@ void parsing()
             if (temp == ".names")
             {
                getline(is, temp);
-               unsigned int len = temp.length();
+               unsigned int len = temp.size();
                unsigned int pos = temp.find_last_of(' ');
                unsigned int midpos;
 
@@ -91,11 +91,12 @@ void parsing()
                std::string token;
                std::vector<std::string> inputs;
 
-               unsigned int start = 0;
+               std::cout << temp << std::endl;
 
-               while ((midpos = temp.find(delimiter, start)) < pos)
-               {
-                  
+               unsigned int start = 1;
+
+               while ((midpos = temp.find(delimiter, start)) <= pos)
+               {            
                   token = temp.substr(start, midpos - start);
                   inputs.push_back(token);
                   start = midpos + 1;
@@ -103,22 +104,26 @@ void parsing()
 
                bool ai = true;
 
-               std::cout << "I work till line 104" << std::endl;
                for (auto i = inputs.begin(); i != inputs.end(); ++i)
                {
                   if (std::find(actual_inputs.begin(), actual_inputs.end(), *i) != actual_inputs.end() == false)
                   {
                      ai = false;
 
+                     for (auto it = nodes.begin(); it != nodes.end(); ++it)
+                        std::cout << it->first << std::endl;
+
                      auto got = nodes.find(*i);
 
                      if (got != nodes.end())
                      {
+                        std::cout << "please print";
                         got->second.output.push_back(output);
                      }
 
                      else
                      {
+                        std::cout << "making node for " << *i <<std::endl;
                         Node a;
                         a.name = token;
                         a.output.push_back(output);
@@ -143,6 +148,7 @@ void parsing()
 
                else
                {
+                  std::cout << "making node for " << output <<std::endl;
                   Node a;
                   a.name = output;
                   a.input = inputs;

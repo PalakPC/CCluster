@@ -150,6 +150,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+node.o: node.cpp.o
+
+.PHONY : node.o
+
+# target to build an object file
+node.cpp.o:
+	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/node.cpp.o
+.PHONY : node.cpp.o
+
+node.i: node.cpp.i
+
+.PHONY : node.i
+
+# target to preprocess a source file
+node.cpp.i:
+	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/node.cpp.i
+.PHONY : node.cpp.i
+
+node.s: node.cpp.s
+
+.PHONY : node.s
+
+# target to generate assembly for a file
+node.cpp.s:
+	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/node.cpp.s
+.PHONY : node.cpp.s
+
 parse.o: parse.cpp.o
 
 .PHONY : parse.o
@@ -177,33 +204,6 @@ parse.cpp.s:
 	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/parse.cpp.s
 .PHONY : parse.cpp.s
 
-starter.o: starter.cpp.o
-
-.PHONY : starter.o
-
-# target to build an object file
-starter.cpp.o:
-	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/starter.cpp.o
-.PHONY : starter.cpp.o
-
-starter.i: starter.cpp.i
-
-.PHONY : starter.i
-
-# target to preprocess a source file
-starter.cpp.i:
-	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/starter.cpp.i
-.PHONY : starter.cpp.i
-
-starter.s: starter.cpp.s
-
-.PHONY : starter.s
-
-# target to generate assembly for a file
-starter.cpp.s:
-	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/starter.cpp.s
-.PHONY : starter.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -216,12 +216,12 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... node.o"
+	@echo "... node.i"
+	@echo "... node.s"
 	@echo "... parse.o"
 	@echo "... parse.i"
 	@echo "... parse.s"
-	@echo "... starter.o"
-	@echo "... starter.i"
-	@echo "... starter.s"
 .PHONY : help
 
 

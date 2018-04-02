@@ -105,42 +105,42 @@ CMakeFiles/ram_wong_clustering.dir/parse.cpp.o.provides: CMakeFiles/ram_wong_clu
 CMakeFiles/ram_wong_clustering.dir/parse.cpp.o.provides.build: CMakeFiles/ram_wong_clustering.dir/parse.cpp.o
 
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.o: CMakeFiles/ram_wong_clustering.dir/flags.make
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.o: starter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ram_wong_clustering.dir/starter.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ram_wong_clustering.dir/starter.cpp.o -c /home/palak/spring2018/pda/ram_wong_clustering/starter.cpp
+CMakeFiles/ram_wong_clustering.dir/node.cpp.o: CMakeFiles/ram_wong_clustering.dir/flags.make
+CMakeFiles/ram_wong_clustering.dir/node.cpp.o: node.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ram_wong_clustering.dir/node.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ram_wong_clustering.dir/node.cpp.o -c /home/palak/spring2018/pda/ram_wong_clustering/node.cpp
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ram_wong_clustering.dir/starter.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/palak/spring2018/pda/ram_wong_clustering/starter.cpp > CMakeFiles/ram_wong_clustering.dir/starter.cpp.i
+CMakeFiles/ram_wong_clustering.dir/node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ram_wong_clustering.dir/node.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/palak/spring2018/pda/ram_wong_clustering/node.cpp > CMakeFiles/ram_wong_clustering.dir/node.cpp.i
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ram_wong_clustering.dir/starter.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/palak/spring2018/pda/ram_wong_clustering/starter.cpp -o CMakeFiles/ram_wong_clustering.dir/starter.cpp.s
+CMakeFiles/ram_wong_clustering.dir/node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ram_wong_clustering.dir/node.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/palak/spring2018/pda/ram_wong_clustering/node.cpp -o CMakeFiles/ram_wong_clustering.dir/node.cpp.s
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.requires:
+CMakeFiles/ram_wong_clustering.dir/node.cpp.o.requires:
 
-.PHONY : CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.requires
+.PHONY : CMakeFiles/ram_wong_clustering.dir/node.cpp.o.requires
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.provides: CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.provides.build
-.PHONY : CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.provides
+CMakeFiles/ram_wong_clustering.dir/node.cpp.o.provides: CMakeFiles/ram_wong_clustering.dir/node.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ram_wong_clustering.dir/build.make CMakeFiles/ram_wong_clustering.dir/node.cpp.o.provides.build
+.PHONY : CMakeFiles/ram_wong_clustering.dir/node.cpp.o.provides
 
-CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.provides.build: CMakeFiles/ram_wong_clustering.dir/starter.cpp.o
+CMakeFiles/ram_wong_clustering.dir/node.cpp.o.provides.build: CMakeFiles/ram_wong_clustering.dir/node.cpp.o
 
 
 # Object files for target ram_wong_clustering
 ram_wong_clustering_OBJECTS = \
 "CMakeFiles/ram_wong_clustering.dir/main.cpp.o" \
 "CMakeFiles/ram_wong_clustering.dir/parse.cpp.o" \
-"CMakeFiles/ram_wong_clustering.dir/starter.cpp.o"
+"CMakeFiles/ram_wong_clustering.dir/node.cpp.o"
 
 # External object files for target ram_wong_clustering
 ram_wong_clustering_EXTERNAL_OBJECTS =
 
 ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/main.cpp.o
 ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/parse.cpp.o
-ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/starter.cpp.o
+ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/node.cpp.o
 ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/build.make
 ram_wong_clustering: CMakeFiles/ram_wong_clustering.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ram_wong_clustering"
@@ -153,7 +153,7 @@ CMakeFiles/ram_wong_clustering.dir/build: ram_wong_clustering
 
 CMakeFiles/ram_wong_clustering.dir/requires: CMakeFiles/ram_wong_clustering.dir/main.cpp.o.requires
 CMakeFiles/ram_wong_clustering.dir/requires: CMakeFiles/ram_wong_clustering.dir/parse.cpp.o.requires
-CMakeFiles/ram_wong_clustering.dir/requires: CMakeFiles/ram_wong_clustering.dir/starter.cpp.o.requires
+CMakeFiles/ram_wong_clustering.dir/requires: CMakeFiles/ram_wong_clustering.dir/node.cpp.o.requires
 
 .PHONY : CMakeFiles/ram_wong_clustering.dir/requires
 

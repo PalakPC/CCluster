@@ -1,1 +1,1 @@
-/usr/bin/c++   -g   CMakeFiles/ram_wong_clustering.dir/main.cpp.o CMakeFiles/ram_wong_clustering.dir/parse.cpp.o CMakeFiles/ram_wong_clustering.dir/starter.cpp.o  -o ram_wong_clustering 
+/usr/bin/c++   -g   CMakeFiles/ram_wong_clustering.dir/main.cpp.o CMakeFiles/ram_wong_clustering.dir/parse.cpp.o CMakeFiles/ram_wong_clustering.dir/node.cpp.o  -o ram_wong_clustering 
