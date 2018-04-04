@@ -4,7 +4,6 @@
 std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
 
 std::unordered_map<std::string, Node> nodes;
-std::vector<std::string> actual_inputs;
 std::vector<std::string> PIs;
 std::vector<std::string> POs;
 

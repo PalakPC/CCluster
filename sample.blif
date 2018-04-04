@@ -1,16 +1,8 @@
 .model sample.blif
-.inputs in1 in2 in3 in4
+.inputs a b c
 .outputs k l
 .latch h c 0
 .latch c e 0
-.names in1 a
-0- 1
--0 1
-.names in2 in1 b
-11 1
-.names in3 c
-0- 1
--0 1
 .names a b d
 11 1
 .names b c e

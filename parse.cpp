@@ -12,9 +12,6 @@ void parsing()
 { 
    std::filebuf fb;
 
-   std::vector<std::string> latch_inputs;
-   std::vector<std::string> latch_outputs;
-
    std::string temp;
    total_nodes = 0;
 
@@ -34,7 +31,16 @@ void parsing()
       is >> temp;
       while (temp != ".outputs")
       {
-         actual_inputs.push_back(temp);
+         if (temp != "\\")
+         {
+            Node a;
+            a.name = temp;
+            a.is_PI = true;
+            a.cluster.push_back(a.name);
+            nodes.insert(std::make_pair(a.name, a));
+            PIs.push_back(a.name);
+            total_nodes++;
+         }
          is>>temp;
       }
 
@@ -48,7 +54,7 @@ void parsing()
             a.is_PO = true;
             a.cluster.push_back(a.name);
             nodes.insert(std::make_pair(a.name, a));
-            POs.push_back(temp);
+            POs.push_back(a.name);
             total_nodes++;
          }
          is>>temp;
@@ -59,9 +65,44 @@ void parsing()
          if (temp == ".latch")
          {
             is>>temp;
-            latch_inputs.push_back(temp);
+            auto got_in = nodes.find(temp);
+            
+            if (got_in != nodes.end())
+            {
+               got_in->second.is_PO = 1;
+            }
+
+            else
+            {
+               Node a;
+               a.name = temp;
+               a.is_PO = true;
+               a.cluster.push_back(a.name);
+               nodes.insert(std::make_pair(a.name, a));
+               total_nodes++;
+            }
+
+            POs.push_back(temp);
+            
             is>>temp;
-            latch_outputs.push_back(temp);
+            auto got_out = nodes.find(temp);
+            
+            if (got_out != nodes.end())
+            {
+               got_out->second.is_PI = 1;
+            }
+
+            else
+            {
+               Node a;
+               a.name = temp;
+               a.is_PI = true;
+               a.cluster.push_back(a.name);
+               nodes.insert(std::make_pair(a.name, a));
+               total_nodes++;
+            }
+            
+            PIs.push_back(temp);
             is.ignore(300,'\n');
          }
 
@@ -89,36 +130,24 @@ void parsing()
                   start = midpos + 1;
                }
 
-               bool ai = true; 
-
                for (auto i = inputs.begin(); i != inputs.end(); ++i)
                {
-                  if (std::find(actual_inputs.begin(), actual_inputs.end(), *i) == actual_inputs.end())
+                  auto got = nodes.find(*i);
+
+                  if (got != nodes.end())
                   {
-                     ai = false;
-
-                     auto got = nodes.find(*i);
-
-                     if (got != nodes.end())
-                     {
-                        got->second.output.push_back(output);
-                     }
-
-                     else
-                     {
-                        Node a;
-                        a.name = *i;
-                        a.output.push_back(output);
-                        a.cluster.push_back(a.name);
-                        nodes.emplace(std::make_pair(a.name, a));
-                        total_nodes++;
-                     }
+                     got->second.output.push_back(output);
                   }
-               }
 
-               if (ai)
-               {
-                  PIs.push_back(output);
+                  else
+                  {
+                     Node a;
+                     a.name = *i;
+                     a.output.push_back(output);
+                     a.cluster.push_back(a.name);
+                     nodes.insert(std::make_pair(a.name, a));
+                     total_nodes++;
+                  }
                }
 
                auto got = nodes.find(output);
@@ -132,13 +161,9 @@ void parsing()
                {
                   Node a;
                   a.name = output;
-                  if (ai)
-                  {
-                     a.is_PI = true;
-                  }
                   a.input = inputs;
                   a.cluster.push_back(a.name);
-                  nodes.emplace(std::make_pair(a.name, a));
+                  nodes.insert(std::make_pair(a.name, a));
                   total_nodes++;
                }
             } 

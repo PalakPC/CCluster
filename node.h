@@ -33,7 +33,6 @@ class Node
 extern std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
 
 extern std::unordered_map<std::string, Node> nodes;
-extern std::vector<std::string> actual_inputs;
 extern std::vector<std::string> PIs;
 extern std::vector<std::string> POs;
 

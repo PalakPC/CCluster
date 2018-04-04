@@ -1,27 +1,3 @@
- in1 a
-alk
- in2 in1 b
-balk
- in3 c
-cklab
- a b d
-ckdlab
- b c e
-ckdlaeb
- a f
-fckdlaeb
- e g
-gfckdlaeb
- c h
-hgfckdlaeb
- f d g i
-ibelkcafgdh
- g h j
-ibejlkcafgdh
- i j k
-ibejlkcafgdh
- j h l
-ibejlkcafgdh
 Actual Inputs
 in1
 in2
@@ -49,7 +25,7 @@ i
 
 name: b
 label: 0
-is_PI: 0
+is_PI: 1
 is_PO: 0
 Inputs
 in2
@@ -109,7 +85,7 @@ k
 
 name: c
 label: 0
-is_PI: 0
+is_PI: 1
 is_PO: 0
 Inputs
 in3
@@ -121,7 +97,7 @@ c
 
 name: a
 label: 0
-is_PI: 0
+is_PI: 1
 is_PO: 0
 Inputs
 in1

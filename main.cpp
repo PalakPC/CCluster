@@ -9,17 +9,17 @@ int main()
 {
    parsing();
 
-   std::cout << "Actual Inputs\n";
-   for (auto i = actual_inputs.begin(); i != actual_inputs.end(); ++i)
-      std::cout << *i << '\n';
-   
    std::cout << "Primary Inputs\n";
-   for (auto i = PIs.begin(); i != PIs.end(); ++i)
-      std::cout << *i << '\n';
+   for (auto it = PIs.begin(); it != PIs.end(); ++it)
+   {
+      std::cout << *it << '\n';
+   }
 
    std::cout << "Primary Outputs\n";
-   for (auto i = POs.begin(); i != POs.end(); ++i)
-      std::cout << *i << '\n';
+   for (auto it = POs.begin(); it != POs.end(); ++it)
+   {
+      std::cout << *it << '\n';
+   }
 
    for (auto it = nodes.begin(); it != nodes.end(); ++it)
       it->second.print_node();
