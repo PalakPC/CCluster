@@ -39,3 +39,4 @@ extern std::vector<std::string> POs;
 extern unsigned int total_nodes;
 
 void parsing();
+void topologicalSort();

@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "node.h"
 
-
+unsigned int total_nodes;
 void parsing() 
 { 
    std::filebuf fb;

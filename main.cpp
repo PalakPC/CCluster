@@ -25,6 +25,8 @@ int main()
       it->second.print_node();
 
    std::cout << "Total number of nodes: " << total_nodes << "\n";
+
+   topologicalSort();
    return 0;
 }
 
