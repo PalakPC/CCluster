@@ -82,7 +82,10 @@ void parsing()
                total_nodes++;
             }
 
-            POs.push_back(temp);
+            if (std::find(POs.begin(), POs.end(), temp) == POs.end())
+            {
+               POs.push_back(temp);
+            }
             
             is>>temp;
             auto got_out = nodes.find(temp);
@@ -102,7 +105,11 @@ void parsing()
                total_nodes++;
             }
             
-            PIs.push_back(temp);
+            if (std::find(PIs.begin(), PIs.end(), temp) == PIs.end())
+            {
+               PIs.push_back(temp);
+            }
+         
             is.ignore(300,'\n');
          }
 
