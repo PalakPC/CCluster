@@ -37,6 +37,9 @@ extern std::vector<std::string> PIs;
 extern std::vector<std::string> POs;
 
 extern unsigned int total_nodes;
+extern std::vector<std::string> topological_order;
 
 void parsing();
-void topologicalSort();
+std::vector<std::string>  topologicalSort();
+void longest_path(std::string from_node);
+void initialize();

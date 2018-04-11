@@ -5,6 +5,7 @@
 # include <iostream>
 # include "node.h"
 
+std::vector<std::string> topological_order;
 int main()
 {
    parsing();
@@ -26,7 +27,8 @@ int main()
 
    std::cout << "Total number of nodes: " << total_nodes << "\n";
 
-   topologicalSort();
+   topological_order = topologicalSort();
+   initialize();
    return 0;
 }
 
