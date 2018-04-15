@@ -37,9 +37,19 @@ extern std::vector<std::string> PIs;
 extern std::vector<std::string> POs;
 
 extern unsigned int total_nodes;
+extern unsigned int size_constraint;
+extern unsigned int inter_cluster_delay;
+extern unsigned int node_delay;
+
 extern std::vector<std::string> topological_order;
+extern std::vector<std::vector<std::string>> final_clusters;
 
 void parsing();
 std::vector<std::string>  topologicalSort();
-void longest_path(std::string from_node);
+void longest_path(std::string);
 void initialize();
+void CreateLabels();
+void LabelNode(std::string);
+std::vector<std::string> Calculate_Cluster_Inputs(std::vector<std::string>);
+std::vector<std::vector<std::string>> Clustering();
+void Calculate_Max_Parameters();
