@@ -115,6 +115,7 @@ void parsing()
                getline(is, line);
                std::istringstream linestream(line);
 
+               getline(linestream, temp, ' ');
                while(getline(linestream, temp, ' '))
                {
                   auto got = nodes.find(temp);
