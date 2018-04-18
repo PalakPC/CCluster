@@ -1,27 +1,23 @@
-.model sample.blif
+.model s9234.1.bench
 .inputs a b c
 .outputs k l
-.latch h c 0
-.latch c e 0
+.wire_load_slope 0.00
 .names a b d
-11 1
+0 1
 .names b c e
-11 1
+0 1
 .names a f
-0- 1
--0 1
+0 1
 .names e g
-0- 1
--0 1
+0 1
 .names c h
-0- 1
--0 1
+0 1
 .names f d g i
-110 1
+0 1
 .names g h j
-11 1
+0 1
 .names i j k
-11 1
+0 1
 .names j h l
-11 1
+0 1
 .end
