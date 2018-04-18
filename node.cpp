@@ -1,306 +1,309 @@
-# include <iostream>
+/*
+ * Miscellaneous functions
+ */
+
+# include <queue> 
+# include <set>
 # include "node.h"
-#include <queue> 
-#include <algorithm>
-#include <unordered_set>
 
 #define NINF -1
 
-std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
-
 std::unordered_map<std::string, Node> nodes;
-std::vector<std::string> PIs;
-std::vector<std::string> POs;
+std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
+std::unordered_set<std::string> p_input;
+std::unordered_set<std::string> p_output;
+std::vector<std::string> topological_order;
+std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
+
+Node::Node()
+{
+   label = 0;
+   input.clear();
+   output.clear();
+   cluster.clear();
+}
 
 void Node::print_node()
 {
-   std::cout << "name: " << name << '\n';
-   std::cout << "label: " << label << '\n';
-   std::cout << "is_PI: " << is_PI << '\n';
-   std::cout << "is_PO: " << is_PO << '\n';
+   std::cout << "label: " << label;
 
-   std::cout << "Inputs\n";
+   std::cout << "\nInputs: ";
    for (auto i = input.begin(); i != input.end(); ++i)
-      std::cout << *i << '\n';
+      std::cout << *i << ' ';
 
-   std::cout << "Outputs\n";
+   std::cout << "\nOutputs: ";
    for (auto i = output.begin(); i != output.end(); ++i)
-      std::cout << *i << '\n';
+      std::cout << *i << ' ';
    
-   std::cout << "Cluster\n";
+   std::cout << "\nCluster: ";
    for (auto i = cluster.begin(); i != cluster.end(); ++i)
-      std::cout << *i << '\n';
+      std::cout << *i << ' ';
 
    std::cout << "\n";
 }
 
-std::vector<std::string>  topologicalSort()
+void topological_sort()
 {
-	// Create a vector to store indegrees of all
-	// vertices. Initialize all indegrees as 0.
-	unsigned int V = total_nodes;
-    std::cout<<"V = "<<V<<"\n";
-	//std::vector<int> in_degree(V, 0);
-	std::unordered_map<std::string, int> in_degree;
-	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
-	{
-		in_degree.insert(std::make_pair((itr->second).name, 0));
-	}
-	// Traverse adjacency lists to fill indegrees of
-	// vertices.  This step takes O(V+E) time
-
-	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
-	{
-		for (auto itr_op = (itr->second).output.begin(); itr_op != (itr->second).output.end(); itr_op++)
-			in_degree[*itr_op]++;
-	}
-
-	// Create an queue and enqueue all vertices with
-	// indegree 0
+   int cnt;
+   std::string u;
 	std::queue<std::string> q;
-	//for (int i = 0; i < V; i++)
-	for (auto itr = in_degree.begin(); itr != in_degree.end(); itr++)
+   std::unordered_map<std::string, int> in_degree;
+	
+   for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+	{
+		in_degree.insert(std::make_pair(itr->first, 0));
+	}
+
+	for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+	{
+		for (auto itr_op = (itr->second).output.begin(); itr_op != (itr->second).output.end(); ++itr_op)
+      {
+			++in_degree[*itr_op];
+      }
+	}
+	
+   for (auto itr = in_degree.begin(); itr != in_degree.end(); ++itr)
+   {
 		if (itr->second == 0)
+      {
 			q.push(itr->first);
+      }
+   }
 
-	// Initialize count of visited vertices
-	int cnt = 0;
-
-	// Create a vector to store result (A topological
-	// ordering of the vertices)
-	std::vector <std::string> top_order;
-
-	// One by one dequeue vertices from queue and enqueue
-	// adjacents if indegree of adjacent becomes 0
+	cnt = 0;
 	while (!q.empty())
 	{
-		// Extract front of queue (or perform dequeue)
-		// and add it to topological order
-		std::string u = q.front();
+		u = q.front();
 		q.pop();
-		top_order.push_back(u);
+		topological_order.push_back(u);
 
-		// Iterate through all its neighbouring nodes
-		// of dequeued node u and decrease their in-degree
-		// by 1
-		std::vector<std::string>::iterator itr;
-		for (itr = nodes[u].output.begin(); itr != nodes[u].output.end(); itr++)
-			// If in-degree becomes zero, add it to queue
-			if (--in_degree[*itr] == 0)
+		for (auto itr = nodes[u].output.begin(); itr != nodes[u].output.end(); ++itr)
+      {
+			if ((--in_degree[*itr]) == 0)
+         {
 				q.push(*itr);
-		cnt++;
+         }
+      }
+		++cnt;
 	}
 
-	// Check if there was a cycle
-	if (cnt != V)
+	if (cnt != total_nodes)
 	{
-        std::cout<<"cnt = "<<cnt<<"\n";
+      std::cout << "cnt = " << cnt << "\n";
 		std::cout << "There exists a cycle in the graph\n";
-		return top_order;
 	}
-
-	// Print topological order
-	for (int i = 0; i<top_order.size(); i++)
-		std::cout << top_order[i] << " ";
-	std::cout << std::endl;
-
-    return top_order;
+	
 }
 
 void longest_path(std::string from_node)
 {
+   unsigned int top_node;
+   unsigned int nodes_iterated;
+   std::string u;
    std::unordered_map<std::string,int> dist;
+   std::unordered_map<std::string, unsigned int> longest_dist;
 
-    // Initialize distances to all vertices as infinite and
-    // distance to source as 0
-    for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
-    {
-        dist.insert(std::make_pair((itr->second).name, NINF));
-    }
+   for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+   {
+      dist.insert(std::make_pair(itr->first, NINF));
+   }
 
-    dist[from_node] = 0;
+   dist[from_node] = 0;
+   top_node = 0;
+   nodes_iterated = 0;
 
-    int top_node = 0;
-    int nodes_iterated = 0;
-    // Process vertices in topological order
-    while (nodes_iterated != topological_order.size())
-    {
-        // Get the next vertex from topological order
-        std::string u = topological_order.at(nodes_iterated);
+   while (nodes_iterated != topological_order.size())
+   {
+      u = topological_order.at(nodes_iterated);
 
-        // Update distances of all adjacent vertices
-        std::vector<std::string>::iterator i;
-        if (dist[u] != NINF)
-        {
-            for (auto i = nodes[u].output.begin(); i != nodes[u].output.end(); ++i)
-                if (dist[*i] < dist[u] + 1)
-                    dist[*i] = dist[u] + 1;
-        }
-        nodes_iterated++;
-    }
-	std::unordered_map<std::string, unsigned int> longest_dist;
-    // Print the calculated longest distances
-    for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
-    {
-        if (dist[itr->first] == NINF)
-        {
-			dist[itr->first] = 0;
-			//std::cout <<itr->first <<"="<< dist[itr->first];
-        }
-        else
-        {
-           // std::cout << itr->first << "=" << dist[(itr->second).name] << " ";
-        }
-		longest_dist.insert(std::make_pair(itr->first, dist[itr->first]));
-    }
-	matrix.insert(std::make_pair(from_node, longest_dist));
+      if (dist[u] != NINF)
+      {
+         for (auto i = nodes[u].output.begin(); i != nodes[u].output.end(); ++i)
+         {
+            if (dist[*i] < dist[u] + 1)
+            {
+               dist[*i] = dist[u] + 1;
+            }
+         }
+      }
+      ++nodes_iterated;
+   }
 
-	return;
+   for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+   {
+      if (dist[itr->first] == NINF)
+      {
+         dist[itr->first] = 0;
+      }
+      longest_dist.insert(std::make_pair(itr->first, dist[itr->first]));
+   }
 
+   matrix.insert(std::make_pair(from_node, longest_dist));
 }
 
 void initialize()
 {
-	std::cout << "Starting initialisation phase";
-	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
-	{
-		longest_path(itr->first);
-	}
-
-	for (auto itr = matrix.begin(); itr != matrix.end(); itr++)
-	{
-		std::cout << "Node " << itr->first << " : ";
-
-		for (auto itr1 = (itr->second).begin(); itr1 != (itr->second).end(); itr1++)
-		{
-			std::cout << itr1->first << "=" << itr1->second << " ";
-		}
-
-		std::cout << "\n";
-	}
-
-	//Removing PIs in topological order
-	topological_order.erase(topological_order.begin(), topological_order.begin() + PIs.size());
-
-	// Print topological order
-	for (int i = 0; i<topological_order.size(); i++)
-		std::cout << topological_order[i] << " ";
-	std::cout << std::endl;
-
+   for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+   {
+      longest_path(itr->first);
+   }
+   
+   topological_order.erase(topological_order.begin(), topological_order.begin() + p_input.size());
 }
 
-void CreateLabels()
+void create_labels()
 {
 	for (auto itr = topological_order.begin(); itr != topological_order.end(); itr++)
 	{
-		LabelNode(*itr);
+		label_node(*itr);
 	}
-	
 }
-/*bool comp(const std::pair<unsigned int, std::string> &a, const std::pair<unsigned int, std::string> &b) 
-{
-	return a.first > b.first;
-}*/
-void LabelNode(std::string cur_node)
-{
-	//CreateGvector(itr)(?) function, return values to G vector
-	//
-	std::vector<std::string> G;
-	//std::vector<int,std::string> label_wrt_curnode;
-	std::vector<std::pair<unsigned int, std::string>> S; // <Label, node>
-	std::vector<std::string> cluster;
-	unsigned int l1 = 0;
-	unsigned int l2 = 0;
 
-	for (auto itr = G.begin(); itr != G.end(); itr++) 
+void label_node(std::string cur_node)
+{
+   unsigned int count;
+   unsigned int level;
+	unsigned int l1;
+	unsigned int l2;
+	std::vector<std::pair<std::string, unsigned int>> G;
+   std::vector<std::pair<unsigned int, std::pair<std::string, unsigned int>>> S;
+	std::unordered_set<std::string> this_cluster;
+   std::set<std::pair<std::string, unsigned int>> temp_queue;
+   std::set<std::string> gates;
+	l1 = 0;
+	l2 = 0;
+
+   G.push_back(std::make_pair(cur_node, 0));
+   for (auto i = nodes[cur_node].input.begin(); i != nodes[cur_node].input.end(); ++i)
+   {
+      gates.insert(*i);
+      temp_queue.insert(std::make_pair(*i, 1));
+   }
+
+   while (!temp_queue.empty())
+   {
+      auto temp = *temp_queue.begin();
+      temp_queue.erase(temp_queue.begin());
+      G.push_back(temp);
+      
+      for (auto i = nodes[temp.first].input.begin(); i != nodes[temp.first].input.end(); ++i)
+      {
+         auto ret = gates.insert(*i);
+
+         if (ret.second)
+         {
+            temp_queue.insert(std::make_pair(*i, temp.second + 1));
+         }
+
+         else
+         {
+            for (auto it = G.begin(); it != G.end(); ++it)
+            {
+               if ((it->first == *i) && (it->second < (temp.second + 1)))
+               {
+                  G.erase(it);
+                  G.push_back(std::make_pair(*i, temp.second + 1));
+               }
+            }
+         }
+      }
+   }
+
+	for (auto itr = G.begin(); itr != G.end(); ++itr) 
 	{
-		if (*itr != cur_node)
+		if (itr->first != cur_node)
 		{
-			S.push_back(std::make_pair(nodes[*itr].label+matrix[*itr][cur_node], *itr)); //check if matrix access is correct
-			//S.push_back(std::pair<unsigned int, std::string>(nodes[*itr].label + matrix[*itr][cur_node], *itr));
+			S.push_back(std::make_pair((nodes[itr->first].label + matrix[itr->first][cur_node]), *itr));
 		}		
 	}
-	
-	//std::sort(S.begin(), S.end(), &(comp));
-	//std::stable_sort(S.begin(), S.end(), std::bind(&comp,this));
-	std::stable_sort(S.begin(), S.end(), [](const std::pair<unsigned int, std::string> &a, const std::pair<unsigned int, std::string> &b) {return a.first > b.first; });
 
-	//If all have same labels, what to do? CHECK! Make sure you get directly connected subgraph
-	std::vector<std::pair<unsigned int, std::string>>::iterator itr;
-	for ( itr = S.begin(); itr != S.begin() + size_constraint -1; itr++)
+	std::stable_sort(S.begin(), S.end(), [](const std::pair<unsigned int, std::pair<std::string, unsigned int>> &a, const std::pair<unsigned int, std::pair<std::string, unsigned int>> &b) { if (a.first == b.first) return a.second.second < b.second.second; else return a.first > b.first; });
+   
+   count = 0;
+   std::vector<std::pair<unsigned int, std::pair<std::string, unsigned int>>>::iterator itr;
+	for (itr = S.begin(); ((count < (size_constraint - 1)) && (itr != S.end())); ++itr, ++count)
 	{
-		cluster.push_back((*itr).second);
-		//if ((nodes[(*itr).second]->second).is_PI)
-		if ((nodes[(*itr).second]).is_PI)
+		this_cluster.insert(itr->second.first);
+		
+      if (p_input.find((*itr).second.first) != p_input.end())
 		{
-			(*itr).first > l1 ? l1 = (*itr).first : l1 = l1;
+			l1 = ((*itr).first > l1) ? (*itr).first : l1;
 		}
 	}
-	cluster.push_back(cur_node);
-	if (nodes[cur_node].is_PI)
-		nodes[cur_node].label > l1 ? l1 = nodes[cur_node].label : l1 = l1;
-	if (itr != S.end())
-		l2 = (*itr).first + inter_cluster_delay;
-	else
-		l2 = 0;
-	l1 > l2 ? nodes[cur_node].label = l1 : nodes[cur_node].label = l2;
-	nodes[cur_node].cluster = cluster;
-	return;
 
+	this_cluster.insert(cur_node);
+
+	if (itr != S.end())
+   {
+		l2 = (*itr).first + inter_cluster_delay;
+   }
+
+	else
+   {
+		l2 = 0;
+   }
+	
+   nodes[cur_node].label = l1 > l2 ? l1 : l2;
+	nodes[cur_node].cluster = this_cluster;
 }
 
-std::vector<std::string> Calculate_Cluster_Inputs(std::vector<std::string> cl)
+std::vector<std::string> calculate_cluster_inputs(std::vector<std::string> cl)
 {
 	std::vector<std::string> I;
 
-	for (auto itr = cl.begin(); itr!= cl.end(); itr++)
-	{
-		for (auto node_itr = nodes[*itr].input.begin(); node_itr != nodes[*itr].input.end(); node_itr++)
-			I.push_back(*node_itr);
-	}
 
 	return I;
-
 }
 
-std::vector<std::vector<std::string>> Clustering()
+void clustering()
 {
 	std::deque<std::string> L;
 	std::string cur_node;
-	std::vector<std::vector<std::string>> S;
-	std::vector<std::string> I;
-	std::vector<std::string> cl;
+	std::set<std::string> I;
+	std::unordered_set<std::string> cl;
 
-
-	for (auto itr = POs.begin(); itr != POs.end(); itr++)
+	for (auto itr = p_output.begin(); itr != p_output.end(); ++itr)
 	{
 		L.push_back(*itr);
 	}
 
-	while (L.size())
+	while (!L.empty())
 	{
 		cur_node = L.front();
 		L.pop_front();
 		cl = nodes[cur_node].cluster;
-		if (std::find(S.begin(), S.end(), cl) != std::end(S)) //Union of S with cluster of current node
-			S.push_back(cl);
-		I = Calculate_Cluster_Inputs(cl);
-		
-		for (auto itr = I.begin(); itr != I.end(); itr++)
-		{
-			if (std::find(L.begin(), L.end(), *itr) != std::end(L))
-				L.push_back(*itr);
-		}
+      auto got = final_clusters.find(cur_node);
+		if (got == final_clusters.end())
+      {
+			final_clusters.insert(std::make_pair(cur_node, cl));
+      }
 
-	}
+      I.clear();
+      for (auto itr = cl.begin(); itr != cl.end(); ++itr)
+      {
+         for (auto node_itr = nodes[*itr].input.begin(); node_itr != nodes[*itr].input.end(); ++node_itr)
+         {
+            if (std::find(cl.begin(), cl.end(), *node_itr) == std::end(cl))
+            {
+               I.insert(*node_itr);
+            }
+         }
+      }
 
-	return S;
+      for (auto itr = I.begin(); itr != I.end(); ++itr)
+      {
+         if (std::find(L.begin(), L.end(), *itr) == std::end(L))
+         {	
+            L.push_back(*itr);
+         }
+      }
+   }
 }
 
-void Calculate_Max_Parameters()
+void calculate_max_parameters()
 {
 	unsigned int max_delay = 0;
-	std::vector<std::string> max_path;
+	std::unordered_set<std::string> max_path;
 
 	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
 	{
@@ -311,10 +314,11 @@ void Calculate_Max_Parameters()
 		}			
 	}
 
-	std::cout << "\nThe maximum delay is " << max_delay;
-	std::cout << "\n The cluster with max delay is ";
+	std::cout << "The maximum delay: " << max_delay << "\n";
+	std::cout << "The cluster with max delay: ";
 	for (auto itr = max_path.begin(); itr != max_path.end(); itr++)
 	{
 		std::cout << *itr << " ";
 	}
+   std::cout << "\n";
 }

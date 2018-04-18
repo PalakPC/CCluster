@@ -2,22 +2,21 @@
  * Parsing 
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include "node.h"
+# include <fstream>
+# include <sstream>
+
+# include "node.h"
 
 unsigned int total_nodes;
+
 void parsing() 
 { 
    std::filebuf fb;
-
    std::string temp;
+
    total_nodes = 0;
 
-   std::string tempchar;
-
-   if (fb.open ("./sample.blif",std::ios::in))
+   if (fb.open("./new_sample.blif",std::ios::in))
    {
       std::istream is(&fb);
 
@@ -27,87 +26,80 @@ void parsing()
          is.ignore(256, '.');
          is >> temp;
       }
-
+      
       is >> temp;
       while (temp != ".outputs")
       {
-         if (temp != "\\")
+         auto it = nodes.find(temp);
+         if ((temp != "\\") && (it == nodes.end()))
          {
             Node a;
-            a.name = temp;
-            a.is_PI = true;
-            a.cluster.push_back(a.name);
-            nodes.insert(std::make_pair(a.name, a));
-            PIs.push_back(a.name);
+            a.label = 1;
+            a.cluster.insert(temp);
+            nodes.insert(std::make_pair(temp, a));
+            p_input.insert(temp);
             total_nodes++;
          }
-         is>>temp;
+         is >> temp;
       }
 
       is >> temp;
       while (temp[0] != '.')
       {
-         if (temp != "\\")
+         auto it = nodes.find(temp);
+         if ((temp != "\\") && (it == nodes.end()))
          {
             Node a;
-            a.name = temp;
-            a.is_PO = true;
-            a.cluster.push_back(a.name);
-            nodes.insert(std::make_pair(a.name, a));
-            POs.push_back(a.name);
+            a.cluster.insert(temp);
+            nodes.insert(std::make_pair(temp, a));
+            p_output.insert(temp);
             total_nodes++;
          }
-         is>>temp;
+         is >> temp;
       }
 
       while (1)
       {
          if (temp == ".latch")
          {
-            is>>temp;
-            auto got_in = nodes.find(temp);
+            is >> temp;
             
-            if (got_in != nodes.end())
-            {
-               got_in->second.is_PO = 1;
-            }
-
-            else
+            auto got_in = nodes.find(temp);
+            if (got_in == nodes.end())
             {
                Node a;
-               a.name = temp;
-               a.is_PO = true;
-               a.cluster.push_back(a.name);
-               nodes.insert(std::make_pair(a.name, a));
+               a.cluster.insert(temp);
+               nodes.insert(std::make_pair(temp, a));
                total_nodes++;
             }
 
-            if (std::find(POs.begin(), POs.end(), temp) == POs.end())
+            auto it = p_output.find(temp);
+            if (it == p_output.end())
             {
-               POs.push_back(temp);
+               p_output.insert(temp);
             }
             
-            is>>temp;
+            is >> temp;
+
             auto got_out = nodes.find(temp);
-            
             if (got_out != nodes.end())
             {
-               got_out->second.is_PI = 1;
+               got_out->second.label = 1;
             }
 
             else
             {
                Node a;
-               a.name = temp;
-               a.is_PI = true;
-               a.cluster.push_back(a.name);
-               nodes.insert(std::make_pair(a.name, a));
+               a.label = 1;
+               a.cluster.insert(temp);
+               nodes.insert(std::make_pair(temp, a));
                total_nodes++;
             }
             
-            if (std::find(PIs.begin(), PIs.end(), temp) == PIs.end())
+            auto it2 = p_input.find(temp);
+            if (it2 == p_input.end())
             {
-               PIs.push_back(temp);
+               p_input.insert(temp);
             }
          
             is.ignore(300,'\n');
@@ -117,83 +109,55 @@ void parsing()
          {
             if (temp == ".names")
             {
-               getline(is, temp);
-
-               unsigned int len = temp.size();
-               unsigned int pos = temp.find_last_of(' ');
-               unsigned int midpos;
-
-               std::string output = temp.substr(pos+1, len - pos - 2);
-               std::string delimiter = " ";
-               std::string token;
+               std::string line;
                std::vector<std::string> inputs;
+               
+               getline(is, line);
+               std::istringstream linestream(line);
 
-               unsigned int start = 1;
-
-               while ((midpos = temp.find(delimiter, start)) <= pos)
-               {            
-                  token = temp.substr(start, midpos - start);
-                  inputs.push_back(token);
-                  start = midpos + 1;
-               }
-
-               for (auto i = inputs.begin(); i != inputs.end(); ++i)
+               while(getline(linestream, temp, ' '))
                {
-                  auto got = nodes.find(*i);
-
-                  if (got != nodes.end())
-                  {
-                     got->second.output.push_back(output);
-                  }
-
-                  else
+                  auto got = nodes.find(temp);
+                  if (got == nodes.end())
                   {
                      Node a;
-                     a.name = *i;
-                     a.output.push_back(output);
-                     a.cluster.push_back(a.name);
-                     nodes.insert(std::make_pair(a.name, a));
+                     a.cluster.insert(temp);
+                     nodes.insert(std::make_pair(temp, a));
                      total_nodes++;
                   }
+                  inputs.push_back(temp);
                }
 
-               auto got = nodes.find(output);
-
-               if (got != nodes.end())
+               for (auto it = inputs.begin(); it != (inputs.end() - 1); ++it)
                {
-                  got->second.input = inputs;
+                  nodes.find(*it)->second.output.insert(inputs[inputs.size() - 1]);
+                  nodes.find(inputs[inputs.size() - 1])->second.input.insert(*it);
                }
-
-               else
-               {
-                  Node a;
-                  a.name = output;
-                  a.input = inputs;
-                  a.cluster.push_back(a.name);
-                  nodes.insert(std::make_pair(a.name, a));
-                  total_nodes++;
-               }
-            } 
+            }
+       
             else
             {
                if (temp == ".end")
+               {
                   break;
+               }
+            
                else
                {
-                  is>> temp;
-                  while (temp[0]!='.')
-                     is>>temp;
+                  is >> temp;
+                  while (temp[0] != '.')
+                  {
+                     is >> temp;
+                  }
                }
             }
          }
       }
-
       fb.close();
    }
 
-   //cout <<"\n The gates are \n";
-   //for(std::vector<string>::iterator it = gates.begin(); it != gates.end(); ++it)
-   //{
-   //   cout<<*it<<"\n";
-   //}
+   else
+   {
+      std::cout << "Cannot open file\n";
+   }
 }

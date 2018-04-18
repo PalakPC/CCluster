@@ -1,40 +1,31 @@
 /*
- * Initial code
+ * Header
  */
 
+# include <iostream>
 # include <string>
 # include <vector>
+# include <algorithm>
 # include <unordered_map>
+# include <unordered_set>
 
 class Node
 {
    public: 
-      std::string name;
       unsigned int label;
-      bool is_PI;
-      bool is_PO;
-      std::vector<std::string> input;
-      std::vector<std::string> output;
-      std::vector<std::string> cluster;
+      std::unordered_set<std::string> input;
+      std::unordered_set<std::string> output;
+      std::unordered_set<std::string> cluster;
 
+      Node();
       void print_node();
-      
-      Node()
-      {
-         label = 0;
-         is_PI = false;
-         is_PO = false;
-         input.clear();
-         output.clear();
-         cluster.clear();
-      }
 };
 
-extern std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
-
+extern std::unordered_set<std::string> p_input;
+extern std::unordered_set<std::string> p_output;
 extern std::unordered_map<std::string, Node> nodes;
-extern std::vector<std::string> PIs;
-extern std::vector<std::string> POs;
+extern std::unordered_map<std::string,
+       std::unordered_map<std::string, unsigned int>> matrix;
 
 extern unsigned int total_nodes;
 extern unsigned int size_constraint;
@@ -42,14 +33,15 @@ extern unsigned int inter_cluster_delay;
 extern unsigned int node_delay;
 
 extern std::vector<std::string> topological_order;
-extern std::vector<std::vector<std::string>> final_clusters;
+extern std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
 
 void parsing();
-std::vector<std::string>  topologicalSort();
+void topological_sort();
 void longest_path(std::string);
 void initialize();
-void CreateLabels();
-void LabelNode(std::string);
-std::vector<std::string> Calculate_Cluster_Inputs(std::vector<std::string>);
-std::vector<std::vector<std::string>> Clustering();
-void Calculate_Max_Parameters();
+void create_labels();
+void label_node(std::string);
+
+std::vector<std::string> calculate_cluster_inputs(std::vector<std::string>);
+void clustering();
+void calculate_max_parameters();
