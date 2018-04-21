@@ -45,3 +45,5 @@ void label_node(std::string);
 std::vector<std::string> calculate_cluster_inputs(std::vector<std::string>);
 void clustering();
 void calculate_max_parameters();
+
+void new_parse();

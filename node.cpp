@@ -91,8 +91,7 @@ void topological_sort()
 	{
       std::cout << "cnt = " << cnt << "\n";
 		std::cout << "There exists a cycle in the graph\n";
-	}
-	
+	}	
 }
 
 void longest_path(std::string from_node)

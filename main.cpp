@@ -61,7 +61,7 @@ int main()
    std::cout << "\n";
 
 #  endif
-
+/*
    initialize();
 
 #  ifdef TEST
@@ -77,11 +77,11 @@ int main()
 	}
    
 #  endif
-   
+*/   
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
    std::cout << "Matrix Formation: " << span.count() << "\n";
-   
+/*   
    start_time = std::chrono::high_resolution_clock::now();
    create_labels();
    end_time = std::chrono::high_resolution_clock::now();
@@ -116,12 +116,12 @@ int main()
 	}
 
 #  endif
-   
+*
    std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
    std::cout << "Number of nodes: "<< total_nodes << "\n"; 
    std::cout << "Number of clusters: " << final_clusters.size() << "\n";
    
    //calculate_max_parameters();
-   
+ */  
    return 0;
 }
