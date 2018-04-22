@@ -61,9 +61,19 @@ int main()
    std::cout << "\n";
 
 #  endif
-/*
-   initialize();
 
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      std::cout << "\n" << it->first << "\n";
+      it->second.print_node();
+   }
+   initialize();
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      std::cout << "\n" << it->first << "\n";
+      it->second.print_node();
+   }
+/*
 #  ifdef TEST
 
 	for (auto itr = matrix.begin(); itr != matrix.end(); ++itr)

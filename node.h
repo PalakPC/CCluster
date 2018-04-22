@@ -13,8 +13,8 @@ class Node
 {
    public: 
       unsigned int label;
-      std::unordered_set<std::string> input;
-      std::unordered_set<std::string> output;
+      std::vector<std::string> input;
+      std::unordered_map<std::string, unsigned int> output;
       std::unordered_set<std::string> cluster;
 
       Node();

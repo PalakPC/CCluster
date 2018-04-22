@@ -131,8 +131,8 @@ void parsing()
 
                for (auto it = inputs.begin(); it != (inputs.end() - 1); ++it)
                {
-                  nodes.find(*it)->second.output.insert(inputs[inputs.size() - 1]);
-                  nodes.find(inputs[inputs.size() - 1])->second.input.insert(*it);
+                  nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], 1));
+                  nodes.find(inputs[inputs.size() - 1])->second.input.push_back(*it);
                }
             }
        

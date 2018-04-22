@@ -15,6 +15,8 @@ std::unordered_set<std::string> p_output;
 std::vector<std::string> topological_order;
 std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
 
+std::unordered_map<std::string,unsigned int>::iterator visited;
+std::unordered_map<std::string,unsigned int>::iterator ittemp;
 Node::Node()
 {
    label = 0;
@@ -33,7 +35,7 @@ void Node::print_node()
 
    std::cout << "\nOutputs: ";
    for (auto i = output.begin(); i != output.end(); ++i)
-      std::cout << *i << ' ';
+      std::cout << i->first << ":" << i->second << ' ';
    
    std::cout << "\nCluster: ";
    for (auto i = cluster.begin(); i != cluster.end(); ++i)
@@ -58,7 +60,7 @@ void topological_sort()
 	{
 		for (auto itr_op = (itr->second).output.begin(); itr_op != (itr->second).output.end(); ++itr_op)
       {
-			++in_degree[*itr_op];
+			++in_degree[itr_op->first];
       }
 	}
 	
@@ -79,9 +81,9 @@ void topological_sort()
 
 		for (auto itr = nodes[u].output.begin(); itr != nodes[u].output.end(); ++itr)
       {
-			if ((--in_degree[*itr]) == 0)
+			if ((--in_degree[itr->first]) == 0)
          {
-				q.push(*itr);
+				q.push(itr->first);
          }
       }
 		++cnt;
@@ -96,6 +98,43 @@ void topological_sort()
 
 void longest_path(std::string from_node)
 {
+   auto it = nodes.find(from_node)->second.output.begin(); 
+   while (it != nodes.find(from_node)->second.output.end())
+   {
+/*
+     if (nodes.find(from_node)->second.output.find(it->first)->second != 1)
+      {
+         break;
+      }
+*/
+      auto it2 = nodes.find(it->first)->second.output.begin(); 
+      while (it2 != nodes.find(it->first)->second.output.end())
+      {
+         if (nodes.find(from_node)->second.output.find(it2->first) == nodes.find(from_node)->second.output.end())
+         {
+            auto got = nodes.find(from_node);
+            got->second.output.insert(std::make_pair(it2->first, (it2->second + 1)));
+            for (auto i = got->second.output.begin(); i != got->second.output.end(); ++i)
+            {
+               std::cout << i->first<<" ";
+            }
+            std::cout << "\n";
+            nodes.find(it2->first)->second.input.push_back(from_node);
+         }
+         else if (nodes.find(from_node)->second.output.find(it2->first)->second >= (it2->second + 1))
+         {
+            break;
+         }
+         else
+         {
+            nodes.find(from_node)->second.output.find(it2->first)->second = (it2->second + 1);
+         }
+         ++it2;
+      }
+      ++it;
+   }
+}
+/*
    unsigned int top_node;
    unsigned int nodes_iterated;
    std::string u;
@@ -138,13 +177,14 @@ void longest_path(std::string from_node)
    }
 
    matrix.insert(std::make_pair(from_node, longest_dist));
-}
+   */
+//}
 
 void initialize()
 {
-   for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
+   for (auto itr = topological_order.begin(); itr != topological_order.end(); ++itr)
    {
-      longest_path(itr->first);
+      longest_path(*itr);
    }
    
    topological_order.erase(topological_order.begin(), topological_order.begin() + p_input.size());

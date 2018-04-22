@@ -1,0 +1,161 @@
+
+Enter the size constraint 
+Enter the inter cluster delay 
+Enter the node delay 
+i
+label: 0
+Inputs: f d g 
+Outputs: k:1 
+Cluster: i 
+
+k
+label: 0
+Inputs: i j 
+Outputs: 
+Cluster: k 
+
+b
+label: 1
+Inputs: 
+Outputs: e:1 d:1 
+Cluster: b 
+
+e
+label: 0
+Inputs: b c 
+Outputs: g:1 
+Cluster: e 
+
+c
+label: 1
+Inputs: 
+Outputs: h:1 e:1 
+Cluster: c 
+
+j
+label: 0
+Inputs: g h 
+Outputs: l:1 k:1 
+Cluster: j 
+
+l
+label: 0
+Inputs: j h 
+Outputs: 
+Cluster: l 
+
+a
+label: 1
+Inputs: 
+Outputs: f:1 d:1 
+Cluster: a 
+
+f
+label: 0
+Inputs: a 
+Outputs: i:1 
+Cluster: f 
+
+g
+label: 0
+Inputs: e 
+Outputs: j:1 i:1 
+Cluster: g 
+
+d
+label: 0
+Inputs: a b 
+Outputs: i:1 
+Cluster: d 
+
+h
+label: 0
+Inputs: c 
+Outputs: l:1 j:1 
+Cluster: h 
+g e d 
+g e i d 
+l h e 
+j l h e 
+g e h l j 
+f i d 
+k l j 
+j g 
+i j g 
+k i 
+k i 
+l j i 
+k l j i 
+
+i
+label: 0
+Inputs: f d g b a e 
+Outputs: k:1 
+Cluster: i 
+
+k
+label: 0
+Inputs: i j h f d g 
+Outputs: 
+Cluster: k 
+
+b
+label: 1
+Inputs: 
+Outputs: g:2 e:1 i:2 d:1 
+Cluster: b 
+
+e
+label: 0
+Inputs: b c 
+Outputs: i:2 j:2 g:1 
+Cluster: e 
+
+c
+label: 1
+Inputs: 
+Outputs: g:2 e:1 h:1 l:2 j:2 
+Cluster: c 
+
+j
+label: 0
+Inputs: g h c e 
+Outputs: l:1 k:1 
+Cluster: j 
+
+l
+label: 0
+Inputs: j h c g 
+Outputs: 
+Cluster: l 
+
+a
+label: 1
+Inputs: 
+Outputs: f:1 i:2 d:1 
+Cluster: a 
+
+f
+label: 0
+Inputs: a 
+Outputs: k:2 i:1 
+Cluster: f 
+
+g
+label: 0
+Inputs: e b c 
+Outputs: k:2 l:2 j:1 i:1 
+Cluster: g 
+
+d
+label: 0
+Inputs: a b 
+Outputs: k:2 i:1 
+Cluster: d 
+
+h
+label: 0
+Inputs: c 
+Outputs: k:2 l:2 j:1 
+Cluster: h 
+Matrix Formation: 0.000790654
