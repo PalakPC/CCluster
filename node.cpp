@@ -98,19 +98,25 @@ void topological_sort()
 
 void longest_path(std::string from_node)
 {
-   auto it = nodes.find(from_node)->second.output.begin(); 
-   while (it != nodes.find(from_node)->second.output.end())
+   unsigned int count;
+   count = 0;
+   auto it = nodes[from_node].output.begin(); 
+   while (1)
    {
+      if (it == nodes[from_node].output.end())
+      {
+         break;
+      }
 /*
      if (nodes.find(from_node)->second.output.find(it->first)->second != 1)
       {
          break;
       }
 */
-      auto it2 = nodes.find(it->first)->second.output.begin(); 
-      while (it2 != nodes.find(it->first)->second.output.end())
+      auto it2 = nodes[it->first].output.begin(); 
+      while (it2 != nodes[it->first].output.end())
       {
-         if (nodes.find(from_node)->second.output.find(it2->first) == nodes.find(from_node)->second.output.end())
+         if (nodes[from_node].output.find(it2->first) == nodes[from_node].output.end())
          {
             auto got = nodes.find(from_node);
             got->second.output.insert(std::make_pair(it2->first, (it2->second + 1)));
@@ -119,19 +125,20 @@ void longest_path(std::string from_node)
                std::cout << i->first<<" ";
             }
             std::cout << "\n";
-            nodes.find(it2->first)->second.input.push_back(from_node);
+            nodes[it2->first].input.push_back(from_node);
          }
-         else if (nodes.find(from_node)->second.output.find(it2->first)->second >= (it2->second + 1))
+         else if (nodes[from_node].output.find(it2->first)->second >= (it2->second + 1))
          {
             break;
          }
          else
          {
-            nodes.find(from_node)->second.output.find(it2->first)->second = (it2->second + 1);
+            nodes[from_node].output.find(it2->first)->second = (it2->second + 1);
          }
          ++it2;
       }
       ++it;
+      ++count;
    }
 }
 /*
