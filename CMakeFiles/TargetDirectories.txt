@@ -1,3 +1,0 @@
-/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/rebuild_cache.dir
-/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/edit_cache.dir
-/home/palak/spring2018/pda/ram_wong_clustering/CMakeFiles/ram_wong_clustering.dir
