@@ -7,14 +7,11 @@
 
 # include "node.h"
 
-unsigned int total_nodes;
 
 void parsing() 
 { 
    std::filebuf fb;
    std::string temp;
-
-   total_nodes = 0;
 
    if (fb.open("./new_sample.blif",std::ios::in))
    {
@@ -38,7 +35,6 @@ void parsing()
             a.cluster.insert(temp);
             nodes.insert(std::make_pair(temp, a));
             p_input.insert(temp);
-            total_nodes++;
          }
          is >> temp;
       }
@@ -53,7 +49,6 @@ void parsing()
             a.cluster.insert(temp);
             nodes.insert(std::make_pair(temp, a));
             p_output.insert(temp);
-            total_nodes++;
          }
          is >> temp;
       }
@@ -70,7 +65,6 @@ void parsing()
                Node a;
                a.cluster.insert(temp);
                nodes.insert(std::make_pair(temp, a));
-               total_nodes++;
             }
 
             auto it = p_output.find(temp);
@@ -93,7 +87,6 @@ void parsing()
                a.label = 1;
                a.cluster.insert(temp);
                nodes.insert(std::make_pair(temp, a));
-               total_nodes++;
             }
             
             auto it2 = p_input.find(temp);
@@ -124,7 +117,6 @@ void parsing()
                      Node a;
                      a.cluster.insert(temp);
                      nodes.insert(std::make_pair(temp, a));
-                     total_nodes++;
                   }
                   inputs.push_back(temp);
                }
@@ -132,7 +124,8 @@ void parsing()
                for (auto it = inputs.begin(); it != (inputs.end() - 1); ++it)
                {
                   nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], 1));
-                  nodes.find(inputs[inputs.size() - 1])->second.input.push_back(*it);
+                  nodes.find(inputs[inputs.size() - 1])->second.input.insert(std::make_pair(*it, 1));
+                  nodes.find(inputs[inputs.size() - 1])->second.orig_input.insert(*it);
                }
             }
        

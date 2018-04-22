@@ -13,7 +13,8 @@ class Node
 {
    public: 
       unsigned int label;
-      std::vector<std::string> input;
+      std::unordered_set<std::string> orig_input;
+      std::unordered_map<std::string, unsigned int> input;
       std::unordered_map<std::string, unsigned int> output;
       std::unordered_set<std::string> cluster;
 
@@ -24,10 +25,7 @@ class Node
 extern std::unordered_set<std::string> p_input;
 extern std::unordered_set<std::string> p_output;
 extern std::unordered_map<std::string, Node> nodes;
-extern std::unordered_map<std::string,
-       std::unordered_map<std::string, unsigned int>> matrix;
 
-extern unsigned int total_nodes;
 extern unsigned int size_constraint;
 extern unsigned int inter_cluster_delay;
 extern unsigned int node_delay;
@@ -41,9 +39,5 @@ void longest_path(std::string);
 void initialize();
 void create_labels();
 void label_node(std::string);
-
-std::vector<std::string> calculate_cluster_inputs(std::vector<std::string>);
 void clustering();
 void calculate_max_parameters();
-
-void new_parse();

@@ -16,14 +16,15 @@ int main()
    std::chrono::high_resolution_clock::time_point start_time;
    std::chrono::high_resolution_clock::time_point end_time;
    std::chrono::duration<double> span;
-
+/*
    std::cout << "\nEnter the size constraint ";
    std::cin >> size_constraint;
    std::cout << "\nEnter the inter cluster delay ";
    std::cin >> inter_cluster_delay;
    std::cout << "\nEnter the node delay ";
    std::cin >> node_delay;
-
+*/
+   size_constraint = 8;
    start_time = std::chrono::high_resolution_clock::now();
    parsing();
 
@@ -61,25 +62,15 @@ int main()
    std::cout << "\n";
 
 #  endif
-
-   for (auto it = nodes.begin(); it != nodes.end(); ++it)
-   {
-      std::cout << "\n" << it->first << "\n";
-      it->second.print_node();
-   }
+   
    initialize();
-   for (auto it = nodes.begin(); it != nodes.end(); ++it)
-   {
-      std::cout << "\n" << it->first << "\n";
-      it->second.print_node();
-   }
-/*
+
 #  ifdef TEST
 
-	for (auto itr = matrix.begin(); itr != matrix.end(); ++itr)
+	for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
 	{
 		std::cout << "Node " << itr->first << " : ";
-		for (auto itr1 = (itr->second).begin(); itr1 != (itr->second).end(); ++itr1)
+		for (auto itr1 = (itr->second).output.begin(); itr1 != (itr->second).output.end(); ++itr1)
 		{
 			std::cout << itr1->first << "=" << itr1->second << " ";
 		}
@@ -87,16 +78,16 @@ int main()
 	}
    
 #  endif
-*/   
+  
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   std::cout << "Matrix Formation: " << span.count() << "\n";
-/*   
+   //std::cout << "Matrix Formation: " << span.count() << "\n";
+   
    start_time = std::chrono::high_resolution_clock::now();
    create_labels();
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   std::cout << "Labelling: " << span.count() << "\n";
+   //std::cout << "Labelling: " << span.count() << "\n";
 
 #  ifdef TEST
 
@@ -106,12 +97,16 @@ int main()
    }
 
 #  endif
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      std::cout << it->second.label << ":" << it->first<<"\n";
+   }
    
    start_time = std::chrono::high_resolution_clock::now();
    clustering();
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   std::cout << "Clustering: " << span.count() << "\n";
+   //std::cout << "Clustering: " << span.count() << "\n";
 
 #  ifdef TEST
 
@@ -126,12 +121,11 @@ int main()
 	}
 
 #  endif
-*
-   std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
-   std::cout << "Number of nodes: "<< total_nodes << "\n"; 
-   std::cout << "Number of clusters: " << final_clusters.size() << "\n";
+   
+   //std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
+   //std::cout << "Number of clusters: " << final_clusters.size() << "\n";
    
    //calculate_max_parameters();
- */  
+   
    return 0;
 }
