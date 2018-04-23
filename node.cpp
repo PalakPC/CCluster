@@ -33,7 +33,6 @@ void Node::print_node()
    std::cout << "Inputs: ";
    for (auto i = input.begin(); i != input.end(); ++i)
    {
-//      std::cout << i->first << ' ';
       std::cout << i->first << ":" << i->second << ' ';
    }
    
@@ -41,14 +40,12 @@ void Node::print_node()
    for (auto i = orig_input.begin(); i != orig_input.end(); ++i)
    {
       std::cout << *i << ' ';
-//      std::cout << i->first << ":" << i->second << ' ';
    }
    
    std::cout << "\nOriginal Outputs: ";
    for (auto i = orig_output.begin(); i != orig_output.end(); ++i)
    {
       std::cout << *i << ' ';
-//      std::cout << i->first << ":" << i->second << ' ';
    }
 
    std::cout << "\nOutputs: ";
@@ -106,44 +103,42 @@ void topological_sort()
 	}	
 }
 
-
 void longest_path(std::string from_node)
 {
-   bool check = 0;
-   if (from_node == "g6570")
-   {
-      check = 1;
-   }
-   std::vector<std::pair<std::string, unsigned int>> temp;
+   unsigned int check = 0;
+   std::unordered_map<std::string, unsigned int> temp_map;
+   std::vector<std::string> temp;
+
    auto got = nodes.find(from_node);
-   for (auto it3 = got->second.output.begin(); it3 != got->second.output.end(); ++it3)
+   for (auto it = got->second.output.begin(); it != got->second.output.end(); ++it)
    {
-      if (it3->second != 1)
+      if (it->second != 1)
       {
          return;
       }
-      temp.push_back(*it3);
+      temp.push_back(it->first);
+      temp_map.insert(*it);
    }
 
-   for (auto it = temp.begin(); it != temp.end(); ++it)
+   for (unsigned int i = 0; i < temp.size(); ++i)
    {
-      auto got2 = nodes.find(it->first);
-      for (auto it2 = got2->second.output.begin(); it2 != got2->second.output.end(); ++it2)
+      unsigned int x = temp_map.find(temp[i])->second + node_delay;
+      auto got2 = nodes.find(temp[i]);
+      for (auto it = got2->second.output.begin(); it != got2->second.output.end(); ++it)
       {
-         if(got->second.output.find(it2->first) == got->second.output.end())   
+         if (got->second.output.find(it->first) == got->second.output.end())
          {
-            temp.push_back(std::make_pair(it2->first, (it->second + 1)));
-            got->second.output.insert(std::make_pair(it2->first, (it->second + 1)));
-            nodes.find(it2->first)->second.input.insert(std::make_pair(from_node, (it->second + 1)));
+            temp.push_back(it->first);
+            temp_map.insert(std::make_pair(it->first, x));
+            got->second.output.insert(std::make_pair(it->first, x));
+            nodes.find(it->first)->second.input.insert(std::make_pair(from_node, x));
          }
-         else if (got->second.output.find(it2->first)->second < (it->second + 1))
+         else if (got->second.output.find(it->first)->second < x)
          {
-            got->second.output.find(it2->first)->second = (it->second + 1);
-            nodes.find(it2->first)->second.input.find(from_node)->second = (it->second + 1);
-         }
-         else
-         {
-            break;
+            auto f = temp_map.find(it->first);
+            f->second = x;
+            got->second.output.find(it->first)->second = x;
+            nodes.find(it->first)->second.input.find(from_node)->second = x;
          }
       }
    }
@@ -179,6 +174,7 @@ void label_node(std::string cur_node)
 {
 	unsigned int l1;
 	unsigned int l2;
+   std::unordered_set<std::string> cluster;
    std::vector<std::pair<std::pair<std::string, unsigned int>, unsigned int>> S;
 	
    l1 = 0;
@@ -197,7 +193,7 @@ void label_node(std::string cur_node)
    auto it = S.begin();
    for (unsigned int count = 0; (count < (size_constraint - 1)) && it != S.end(); ++count, ++it)
    {
-      nodes[cur_node].cluster.insert(it->first.first);
+      cluster.insert(it->first.first);
       if (p_input.find(it->first.first) != p_input.end())
       {
          if (l1 < it->second)
@@ -206,6 +202,7 @@ void label_node(std::string cur_node)
          }
       }
    }
+   cluster.insert(cur_node);
 
    if (it != S.end())
    {
@@ -220,6 +217,7 @@ void label_node(std::string cur_node)
    {
       nodes[cur_node].label = l2;
    }
+   nodes[cur_node].cluster = cluster;
 }
 
 void create_labels()

@@ -101,30 +101,31 @@ int main(int argc, char *argv[])
   
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   //std::cout << "Matrix Formation: " << span.count() << "\n";
+   std::cout << "Matrix Formation: " << span.count() << "\n";
    
    start_time = std::chrono::high_resolution_clock::now();
    create_labels();
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   //std::cout << "Labelling: " << span.count() << "\n";
+   std::cout << "Labelling: " << span.count() << "\n";
 
-//#  ifdef TEST
+#  ifdef TEST
 
    for (auto it = nodes.begin(); it != nodes.end(); ++it)
    {
+//      std::cout << it->first <<":"<<it->second.label<< "\n";
       std::cout << it->first << "\n";
       it->second.print_node();
    }
 
-//#  endif
+#  endif
 
    
    start_time = std::chrono::high_resolution_clock::now();
    clustering();
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   //std::cout << "Clustering: " << span.count() << "\n";
+   std::cout << "Clustering: " << span.count() << "\n";
 
 #  ifdef TEST
 
