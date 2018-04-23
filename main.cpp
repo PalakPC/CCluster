@@ -7,26 +7,46 @@
 
 # include "node.h"
 
-unsigned int size_constraint;
-unsigned int inter_cluster_delay;
-unsigned int node_delay;
+std::string file_name;
+unsigned int size_constraint = 8;
+unsigned int inter_cluster_delay = 3;
+unsigned int node_delay = 1;
 
-int main()
+int main(int argc, char *argv[])
 {
+   if ((argc < 2) || (argc > 5))
+   {
+      std::cout << "File name not specified.\nUse proper execution format:\n" \
+         << "./ram_wong_clustering <file_name required> " \
+         << "<size_constraint optional, default 8> " \
+         << "<inter_cluster_delay optional, default 3> " \
+         << "<node_delay optional, default 1>\n";
+      exit(1);
+   }
+
+   file_name = argv[1];
+
+   if (argc >= 3)
+   {
+   size_constraint = std::stoi(argv[2]);
+   }
+
+   if (argc >= 4)
+   {
+   inter_cluster_delay = std::stoi(argv[3]);
+   }
+
+   if (argc == 5)
+   {
+      node_delay = std::stoi(argv[4]);
+   } 
+
    std::chrono::high_resolution_clock::time_point start_time;
    std::chrono::high_resolution_clock::time_point end_time;
    std::chrono::duration<double> span;
-/*
-   std::cout << "\nEnter the size constraint ";
-   std::cin >> size_constraint;
-   std::cout << "\nEnter the inter cluster delay ";
-   std::cin >> inter_cluster_delay;
-   std::cout << "\nEnter the node delay ";
-   std::cin >> node_delay;
-*/
-   size_constraint = 8;
+   
    start_time = std::chrono::high_resolution_clock::now();
-   parsing();
+   parsing(file_name);
 
 #  ifdef TEST
 
@@ -89,18 +109,16 @@ int main()
    span = end_time - start_time;
    //std::cout << "Labelling: " << span.count() << "\n";
 
-#  ifdef TEST
+//#  ifdef TEST
 
    for (auto it = nodes.begin(); it != nodes.end(); ++it)
    {
+      std::cout << it->first << "\n";
       it->second.print_node();
    }
 
-#  endif
-   for (auto it = nodes.begin(); it != nodes.end(); ++it)
-   {
-      std::cout << it->second.label << ":" << it->first<<"\n";
-   }
+//#  endif
+
    
    start_time = std::chrono::high_resolution_clock::now();
    clustering();
@@ -112,7 +130,7 @@ int main()
 
 	for (auto itr = final_clusters.begin(); itr != final_clusters.end(); ++itr)
 	{
-      std::cout << itr->first << "\n";
+      std::cout << itr->first << ": ";
 		for (auto itr1 = itr->second.begin(); itr1 != itr->second.end(); ++itr1)
 		{
 			std::cout << *itr1 << " ";
@@ -122,8 +140,8 @@ int main()
 
 #  endif
    
-   //std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
-   //std::cout << "Number of clusters: " << final_clusters.size() << "\n";
+   std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
+   std::cout << "Number of clusters: " << final_clusters.size() << "\n";
    
    //calculate_max_parameters();
    

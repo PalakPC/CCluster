@@ -8,12 +8,12 @@
 # include "node.h"
 
 
-void parsing() 
+void parsing(std::string file) 
 { 
    std::filebuf fb;
    std::string temp;
 
-   if (fb.open("./new_sample.blif",std::ios::in))
+   if (fb.open(file, std::ios::in))
    {
       std::istream is(&fb);
 
@@ -57,6 +57,7 @@ void parsing()
       {
          if (temp == ".latch")
          {
+            std::string temp2;
             is >> temp;
             
             auto got_in = nodes.find(temp);
@@ -73,9 +74,9 @@ void parsing()
                p_output.insert(temp);
             }
             
-            is >> temp;
+            is >> temp2;
 
-            auto got_out = nodes.find(temp);
+            auto got_out = nodes.find(temp2);
             if (got_out != nodes.end())
             {
                got_out->second.label = 1;
@@ -85,16 +86,16 @@ void parsing()
             {
                Node a;
                a.label = 1;
-               a.cluster.insert(temp);
-               nodes.insert(std::make_pair(temp, a));
+               a.cluster.insert(temp2);
+               nodes.insert(std::make_pair(temp2, a));
             }
             
-            auto it2 = p_input.find(temp);
+            auto it2 = p_input.find(temp2);
             if (it2 == p_input.end())
             {
-               p_input.insert(temp);
+               p_input.insert(temp2);
             }
-         
+
             is.ignore(300,'\n');
          }
 
@@ -123,9 +124,15 @@ void parsing()
 
                for (auto it = inputs.begin(); it != (inputs.end() - 1); ++it)
                {
-                  nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], 1));
-                  nodes.find(inputs[inputs.size() - 1])->second.input.insert(std::make_pair(*it, 1));
-                  nodes.find(inputs[inputs.size() - 1])->second.orig_input.insert(*it);
+                  auto got = p_output.find(*it);
+                  auto got2 = p_input.find(inputs[inputs.size() - 1]);
+                  if ((got == p_output.end()) && (got2 == p_input.end()))
+                  {
+                     nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], 1));
+                     nodes.find(*it)->second.orig_output.push_back(inputs[inputs.size() - 1]);
+                     nodes.find(inputs[inputs.size() - 1])->second.input.insert(std::make_pair(*it, 1));
+                     nodes.find(inputs[inputs.size() - 1])->second.orig_input.push_back(*it);
+                  }
                }
             }
        

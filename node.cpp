@@ -28,20 +28,40 @@ Node::Node()
 
 void Node::print_node()
 {
-   std::cout << "label: " << label;
+   std::cout << "label: " << label << "\n";
 
-   std::cout << "\nInputs: ";
+   std::cout << "Inputs: ";
    for (auto i = input.begin(); i != input.end(); ++i)
+   {
+//      std::cout << i->first << ' ';
       std::cout << i->first << ":" << i->second << ' ';
+   }
+   
+   std::cout << "\nOriginal Inputs: ";
+   for (auto i = orig_input.begin(); i != orig_input.end(); ++i)
+   {
+      std::cout << *i << ' ';
+//      std::cout << i->first << ":" << i->second << ' ';
+   }
+   
+   std::cout << "\nOriginal Outputs: ";
+   for (auto i = orig_output.begin(); i != orig_output.end(); ++i)
+   {
+      std::cout << *i << ' ';
+//      std::cout << i->first << ":" << i->second << ' ';
+   }
 
    std::cout << "\nOutputs: ";
    for (auto i = output.begin(); i != output.end(); ++i)
+   {
       std::cout << i->first << ":" << i->second << ' ';
-   
+   }
+
    std::cout << "\nCluster: ";
    for (auto i = cluster.begin(); i != cluster.end(); ++i)
+   {
       std::cout << *i << ' ';
-
+   }
    std::cout << "\n";
 }
 
@@ -54,24 +74,13 @@ void topological_sort()
 	
    for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
 	{
-		in_degree.insert(std::make_pair(itr->first, 0));
-	}
-
-	for (auto itr = nodes.begin(); itr != nodes.end(); ++itr)
-	{
-		for (auto itr_op = (itr->second).output.begin(); itr_op != (itr->second).output.end(); ++itr_op)
+		in_degree.insert(std::make_pair(itr->first, itr->second.input.size()));
+      
+      if (!itr->second.input.size())
       {
-			++in_degree[itr_op->first];
+         q.push(itr->first);
       }
 	}
-	
-   for (auto itr = in_degree.begin(); itr != in_degree.end(); ++itr)
-   {
-		if (itr->second == 0)
-      {
-			q.push(itr->first);
-      }
-   }
 
 	cnt = 0;
 	while (!q.empty())
@@ -97,22 +106,33 @@ void topological_sort()
 	}	
 }
 
+
 void longest_path(std::string from_node)
 {
-   std::map<std::string, unsigned int> temp;
-   auto got = nodes.find(from_node);
-   for (auto it = got->second.output.begin(); it != got->second.output.end(); ++it)
+   bool check = 0;
+   if (from_node == "g6570")
    {
-      temp.insert(*it);
+      check = 1;
+   }
+   std::vector<std::pair<std::string, unsigned int>> temp;
+   auto got = nodes.find(from_node);
+   for (auto it3 = got->second.output.begin(); it3 != got->second.output.end(); ++it3)
+   {
+      if (it3->second != 1)
+      {
+         return;
+      }
+      temp.push_back(*it3);
    }
 
    for (auto it = temp.begin(); it != temp.end(); ++it)
    {
-      for (auto it2 = nodes.find(it->first)->second.output.begin(); it2 != nodes.find(it->first)->second.output.end(); ++it2)
+      auto got2 = nodes.find(it->first);
+      for (auto it2 = got2->second.output.begin(); it2 != got2->second.output.end(); ++it2)
       {
          if(got->second.output.find(it2->first) == got->second.output.end())   
          {
-            temp.insert(std::make_pair(it2->first, (it->second + 1)));
+            temp.push_back(std::make_pair(it2->first, (it->second + 1)));
             got->second.output.insert(std::make_pair(it2->first, (it->second + 1)));
             nodes.find(it2->first)->second.input.insert(std::make_pair(from_node, (it->second + 1)));
          }
@@ -133,27 +153,35 @@ void initialize()
 {
    for (auto itr = topological_order.begin(); itr != topological_order.end(); ++itr)
    {
-      longest_path(*itr);
+      if (p_output.find(*itr) == p_output.end())
+      {
+         longest_path(*itr);
+      }
    }
    
    topological_order.erase(topological_order.begin(), topological_order.begin() + p_input.size());
 }
 
-void create_labels()
+bool compareTwo (std::pair<std::pair<std::string, unsigned int>, unsigned int> a, std::pair<std::pair<std::string, unsigned int>, unsigned int> b)
 {
-	for (auto itr = topological_order.begin(); itr != topological_order.end(); itr++)
-	{
-		label_node(*itr);
-	}
+   if (a.second == b.second)
+   {
+      return a.first.second < b.first.second;
+   }
+
+   else
+   {
+      return a.second > b.second;
+   }
 }
 
 void label_node(std::string cur_node)
 {
-   unsigned int count;
 	unsigned int l1;
 	unsigned int l2;
    std::vector<std::pair<std::pair<std::string, unsigned int>, unsigned int>> S;
-	l1 = 0;
+	
+   l1 = 0;
 	l2 = 0;
 
    for (auto it = nodes[cur_node].input.begin(); it != nodes[cur_node].input.end(); ++it)
@@ -164,28 +192,42 @@ void label_node(std::string cur_node)
       S.push_back(std::make_pair(*it, label));
    }
 
-	std::stable_sort(S.begin(), S.end(), [](const std::pair<std::pair<std::string, unsigned int>, unsigned int> &a, const std::pair<std::pair<std::string, unsigned int>, unsigned int> &b) { if (a.second == b.second) return a.first.second < b.first.second; else return a.second > b.second; });
+   std::sort(S.begin(), S.end(), compareTwo);
 
-   count = 0;
-   std::vector<std::pair<std::pair<std::string, unsigned int>, unsigned int>>::iterator itr;
-	for (itr = S.begin(); ((count < (size_constraint - 1)) && (itr != S.end())); ++itr, ++count)
-	{
-		nodes[cur_node].cluster.insert(itr->first.first);
-		
-      if (p_input.find((*itr).first.first) != p_input.end())
-		{
-			l1 = ((*itr).second > l1) ? (*itr).second : l1;
-		}
-	}
-
-	nodes[cur_node].cluster.insert(cur_node);
-
-	if (itr != S.end())
+   auto it = S.begin();
+   for (unsigned int count = 0; (count < (size_constraint - 1)) && it != S.end(); ++count, ++it)
    {
-		l2 = (*itr).second + inter_cluster_delay;
+      nodes[cur_node].cluster.insert(it->first.first);
+      if (p_input.find(it->first.first) != p_input.end())
+      {
+         if (l1 < it->second)
+         {
+            l1 = it->second;
+         }
+      }
    }
 
-   nodes[cur_node].label = l1 > l2 ? l1 : l2;
+   if (it != S.end())
+   {
+      l2 = it->second + inter_cluster_delay;
+   }
+
+   if (l1 > l2)
+   {
+      nodes[cur_node].label = l1;
+   }
+   else
+   {
+      nodes[cur_node].label = l2;
+   }
+}
+
+void create_labels()
+{
+	for (auto itr = topological_order.begin(); itr != topological_order.end(); itr++)
+	{
+		label_node(*itr);
+	}
 }
 
 void clustering()
