@@ -5,12 +5,12 @@ Rajaraman and Wong algorithm for optimum polynomial time clustering.
 ## Files:
 
 * CMakeLists.txt: Self explanatory. We used cmake to generate our Makefile
-* main.cpp: Self explanatory. Handles function calls and print statements
-* parse.cpp: Contains parsing function for the blif files
-* node.cpp: Contains all relevant functions used in the algorithm
-* node.h: Header file with class declaration and function definitions
-* sample.blif: Sample blif file we made, creates the DAG shown in Prof. Lim's book
-* xyz.blif: blif files provided
+* main.cpp:       Self explanatory. Handles function calls and print statements
+* parse.cpp:      Contains parsing function for the blif files
+* node.cpp:       Contains all relevant functions used in the algorithm
+* node.h:         Header file with class declaration and function definitions
+* sample.blif:    Sample blif file we made, creates the DAG shown in Prof. Lim's book
+* xyz.blif:       blif files provided
 
 ## How to run
 
