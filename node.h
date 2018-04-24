@@ -33,6 +33,7 @@ extern unsigned int inter_cluster_delay;
 extern unsigned int node_delay;
 extern bool post;
 
+extern unsigned int max_delay;
 extern std::vector<std::string> topological_order;
 extern std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
 extern std::vector<std::unordered_set<std::string>> fclusters;
@@ -52,3 +53,4 @@ void dag_json();
 void label_json();
 void cluster_json();
 void matrix_csv();
+void result_csv();

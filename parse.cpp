@@ -354,3 +354,23 @@ void matrix_csv()
       jsonf << "\n";
    }
 }
+
+void result_csv()
+{
+   std::ofstream jsonf(file_name + ".result.csv");
+
+   jsonf << "Metric,Value\n";
+   jsonf << "Number of nodes," << nodes.size() << "\n";
+   jsonf << "Number of clusters,";
+   if (post)
+   {
+      jsonf << fclusters.size();
+   }
+   else
+   {
+      jsonf << final_clusters.size();
+   }
+   jsonf << "\n";
+   jsonf << "Maximum delay," << max_delay << "\n";
+}
+

@@ -204,6 +204,7 @@ int main(int argc, char *argv[])
       label_json();
       cluster_json();
       matrix_csv();
+      result_csv();
    }
    
    return 0;

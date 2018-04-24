@@ -18,6 +18,9 @@ std::vector<std::unordered_set<std::string>> fclusters;
 
 std::unordered_map<std::string,unsigned int>::iterator visited;
 std::unordered_map<std::string,unsigned int>::iterator ittemp;
+
+unsigned int max_delay;
+
 Node::Node()
 {
    label = 0;
@@ -275,7 +278,7 @@ void clustering()
 
 void calculate_max_parameters()
 {
-	unsigned int max_delay = 0;
+	max_delay = 0;
 
 	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
 	{
@@ -285,7 +288,9 @@ void calculate_max_parameters()
 		}			
 	}
 
-	std::cout << "Maximum delay:\t\t" << max_delay + 1 << "\n";
+   ++max_delay;
+
+	std::cout << "Maximum delay:\t\t" << max_delay << "\n";
 }
 
 void post_processing()
