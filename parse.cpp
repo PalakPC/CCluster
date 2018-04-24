@@ -127,6 +127,7 @@ void parsing(std::string file)
                   if ((got == p_output.end()) && (got2 == p_input.end()))
                   {
                      nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], node_delay));
+                     nodes.find(*it)->second.orig_output.insert(inputs[inputs.size() - 1]);
                      nodes.find(inputs[inputs.size() - 1])->second.input.insert(std::make_pair(*it, node_delay));
                      nodes.find(inputs[inputs.size() - 1])->second.orig_input.insert(*it);
                   }
@@ -158,4 +159,137 @@ void parsing(std::string file)
    {
       std::cout << "Cannot open file\n";
    }
+}
+
+
+void dag_json()
+{
+   std::ofstream jsonf(file_name + ".dag.json");
+
+   jsonf << "{\n";
+   jsonf << "\"nodes\": [\n";
+
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      jsonf << "{\"id\": \"" << it->first << "\", \"group\": 0},\n"; 
+   }
+
+   long pos = jsonf.tellp();
+   jsonf.seekp(pos-2);
+   jsonf << "\n";
+
+   jsonf << "],\n";
+
+   jsonf <<"\"links\": [\n";
+
+   for (auto it3 = nodes.begin(); it3 != nodes.end(); ++it3)
+   {
+      for (auto it2 = it3->second.orig_output.begin(); it2 != it3->second.orig_output.end(); ++it2)
+      {
+         jsonf << "{\"source\": \"" << it3->first << "\", \"target\": \"" << *it2 << "\", \"value\": 1},\n";
+      }
+   }
+  
+   pos = jsonf.tellp();
+   jsonf.seekp(pos - 2);
+   jsonf << "\n";
+
+   jsonf << "]\n";
+   jsonf << "}\n";
+}
+
+void label_json()
+{
+   std::ofstream jsonf(file_name + ".label.json");
+
+   jsonf << "{\n";
+   jsonf << "\"nodes\": [\n";
+
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      jsonf << "{\"id\": \"" << it->first << " = " << it->second.label << "\", \"group\": 0},\n"; 
+   }
+
+   long pos = jsonf.tellp();
+   jsonf.seekp(pos-2);
+   jsonf << "\n";
+
+   jsonf << "],\n";
+
+   jsonf << "\"links\": [\n";
+
+   for (auto it3 = nodes.begin(); it3 != nodes.end(); ++it3)
+   {
+      for (auto it2 = it3->second.orig_output.begin(); it2 != it3->second.orig_output.end(); ++it2)
+      {
+         jsonf << "{\"source\": \"" << it3->first << "\", \"target\": \"" << *it2 << "\", \"value\": 1},\n"; 
+      } 
+   }
+
+   pos = jsonf.tellp();
+   jsonf.seekp(pos-2);
+   jsonf << "\n";
+   
+   jsonf<<"]\n";
+   jsonf<<"}\n";
+}
+
+void cluster_json()
+{
+   unsigned int count = 1;
+   std::ofstream jsonf(file_name + ".cluster.json");
+
+   jsonf << "{\n";
+   jsonf << "\"nodes\": [\n";
+
+   std::unordered_map<std::string, unsigned int> nodes_seen;
+   
+   for (auto it = final_clusters.begin(); it != final_clusters.end(); ++it)
+   {
+      for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+      {
+         auto got = nodes_seen.find(*it2);
+         if (got == nodes_seen.end())
+         {
+            nodes_seen.insert(std::make_pair(*it2, 1));
+            jsonf << "{\"id\": \"" << *it2 << "0\", \"group\": " << count << "},\n"; 
+         }
+         else
+         {
+            jsonf << "{\"id\": \"" << *it2 << got->second << "\", \"group\": " << count << "},\n"; 
+            ++(got->second);
+         }
+      }
+      ++count;
+   }
+
+   long pos = jsonf.tellp();
+   jsonf.seekp(pos-2);
+   jsonf << "\n";
+   
+   jsonf << "],\n";
+
+   jsonf<<"\"links\": [\n";
+
+   for (auto it3 = nodes.begin(); it3 != nodes.end(); ++it3)
+   {
+      for (auto it2 = it3->second.orig_output.begin(); it2 != it3->second.orig_output.end(); ++it2)
+      {
+         for (unsigned int i = 0; i < nodes_seen.find(it3->first)->second; ++i)
+         {
+            for (unsigned int j = 0; j < nodes_seen.find(*it2)->second; ++j)
+            {
+               jsonf << "{\"source\": \"" << it3->first << i << "\", \"target\": \"" << *it2 << j << "\", \"value\": 1},\n"; 
+
+            }
+         }
+      }
+   }
+   
+   pos = jsonf.tellp();
+   jsonf.seekp(pos-2);
+   jsonf << "\n";
+   
+   jsonf<<"]\n";
+   jsonf<<"}\n";
 }

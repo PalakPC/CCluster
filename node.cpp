@@ -41,6 +41,12 @@ void Node::print_node()
       std::cout << *i << ' ';
    }
    
+   std::cout << "\nOriginal Outputs: ";
+   for (auto i = orig_output.begin(); i != orig_output.end(); ++i)
+   {
+      std::cout << *i << ' ';
+   }
+   
    std::cout << "\nOutputs: ";
    for (auto i = output.begin(); i != output.end(); ++i)
    {

@@ -14,6 +14,7 @@ class Node
    public: 
       unsigned int label;
       std::unordered_set<std::string> orig_input;
+      std::unordered_set<std::string> orig_output;
       std::unordered_map<std::string, unsigned int> input;
       std::unordered_map<std::string, unsigned int> output;
       std::unordered_set<std::string> cluster;
@@ -26,6 +27,7 @@ extern std::unordered_set<std::string> p_input;
 extern std::unordered_set<std::string> p_output;
 extern std::unordered_map<std::string, Node> nodes;
 
+extern std::string file_name;
 extern unsigned int size_constraint;
 extern unsigned int inter_cluster_delay;
 extern unsigned int node_delay;
@@ -41,3 +43,7 @@ void create_labels();
 void label_node(std::string);
 void clustering();
 void calculate_max_parameters();
+
+void dag_json();
+void label_json();
+void cluster_json();

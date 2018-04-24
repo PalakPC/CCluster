@@ -12,6 +12,7 @@ std::string file_name;
 unsigned int size_constraint = 8;
 unsigned int inter_cluster_delay = 3;
 unsigned int node_delay = 1;
+unsigned int json = 0;
 
 void showUsage() 
 {
@@ -19,12 +20,13 @@ void showUsage()
    printf("Options: -s <size_constraint, default 8>\n");
    printf("         -d <inter_cluster_delay, default 3>\n");
    printf("         -n <node_delay, default 1>\n");
+   printf("         -j <generate json? yes (1) or no (0), default 0>\n");
 }
 
 int main(int argc, char *argv[])
 {
    int c;
-   while ((c = getopt(argc, argv, "s:d:n:")) != -1) 
+   while ((c = getopt(argc, argv, "s:d:n:j:")) != -1) 
    {
       switch (c) 
       {
@@ -37,8 +39,9 @@ int main(int argc, char *argv[])
          case 'n':
             node_delay = atoi(optarg);
             break;
-         case '?':
-         case 'h':
+         case 'j':
+            json = atoi(optarg);
+            break;
          default:
             showUsage();
             exit(1);
@@ -55,33 +58,6 @@ int main(int argc, char *argv[])
       exit(1);
    }
 
-/*   if ((argc < 2) || (argc > 5))
-   {
-      std::cout << "File name not specified.\nUse proper execution format:\n" \
-         << "./ram_wong_clustering <file_name required> " \
-         << "<size_constraint optional, default 8> " \
-         << "<inter_cluster_delay optional, default 3> " \
-         << "<node_delay optional, default 1>\n";
-      exit(1);
-   }
-
-   file_name = argv[1];
-
-   if (argc >= 3)
-   {
-      size_constraint = std::stoi(argv[2]);
-   }
-
-   if (argc >= 4)
-   {
-      inter_cluster_delay = std::stoi(argv[3]);
-   }
-
-   if (argc == 5)
-   {
-      node_delay = std::stoi(argv[4]);
-   } 
-*/
    std::cout << "Timings\n\n";
 
    std::chrono::high_resolution_clock::time_point start_time;
@@ -204,6 +180,13 @@ int main(int argc, char *argv[])
    std::cout << "Number of clusters:\t" << final_clusters.size() << "\n";
    
    calculate_max_parameters();
+
+   if (json)
+   {
+      dag_json();
+      label_json();
+      cluster_json();
+   }
    
    return 0;
 }

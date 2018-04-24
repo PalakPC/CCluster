@@ -20,7 +20,7 @@ Follow the following steps for execution:
 * Run "make" to generate executable. It is called "ram_wong_clustering" (long name, I know, sorry, bugged me too :D)
 * Use the following command to execute
    * "./ram_wong_clustering [options] <blif file>"
-   * Options are: "-s <size_constraint, default 8> -d <inter_cluster_delay, default 3> -n <node_delay, default 1>"
+   * Options are: "-s <size_constraint, default 8> -d <inter_cluster_delay, default 3> -n <node_delay, default 1> -j <generate json? yes(1) or no(0)>"
 
 
 The code will execute (don't rush, it may take a few minutes for the biggest blif in the folder) and display the timings (in seconds) for different steps of algorithm.  
