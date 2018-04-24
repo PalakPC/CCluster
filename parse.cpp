@@ -299,14 +299,11 @@ void cluster_json()
    {
       for (auto it2 = it3->second.orig_output.begin(); it2 != it3->second.orig_output.end(); ++it2)
       {
-         for (unsigned int i = 0; i < nodes_seen.find(it3->first)->second; ++i)
-         {
             for (unsigned int j = 0; j < nodes_seen.find(*it2)->second; ++j)
             {
-               jsonf << "{\"source\": \"" << it3->first << i << "\", \"target\": \"" << *it2 << j << "\", \"value\": 1},\n"; 
+               jsonf << "{\"source\": \"" << it3->first << "0\", \"target\": \"" << *it2 << j << "\", \"value\": 1},\n"; 
 
             }
-         }
       }
    }
 
