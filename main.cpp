@@ -203,6 +203,7 @@ int main(int argc, char *argv[])
       dag_json();
       label_json();
       cluster_json();
+      matrix_csv();
    }
    
    return 0;

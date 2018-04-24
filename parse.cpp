@@ -222,7 +222,7 @@ void label_json()
    {
       for (auto it2 = it3->second.orig_output.begin(); it2 != it3->second.orig_output.end(); ++it2)
       {
-         jsonf << "{\"source\": \"" << it3->first << "\", \"target\": \"" << *it2 << "\", \"value\": 1},\n"; 
+         jsonf << "{\"source\": \"" << it3->first << " = " << it3->second.label << "\", \"target\": \"" << *it2 << " = " << nodes.find(*it2)->second.label << "\", \"value\": 1},\n"; 
       } 
    }
 
@@ -316,4 +316,41 @@ void cluster_json()
    
    jsonf<<"]\n";
    jsonf<<"}\n";
+}
+
+void matrix_csv()
+{ 
+   std::ofstream jsonf(file_name + ".matrix.csv");
+
+   jsonf << "Node,";
+
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      jsonf << it->first << ","; 
+   }
+
+   long pos = jsonf.tellp();
+   jsonf.seekp(pos-1);
+   jsonf << "\n";
+
+   for (auto it = nodes.begin(); it != nodes.end(); ++it)
+   {
+      jsonf << it->first << ","; 
+      for (auto it2 = nodes.begin(); it2 != nodes.end(); ++it2)
+      {
+         auto got = it->second.output.find(it2->first);
+         if (got == it->second.output.end())
+         {
+            jsonf << "0,";
+         }
+         else
+         {
+            jsonf << got->second << ",";
+         }
+      }
+      
+      long pos = jsonf.tellp();
+      jsonf.seekp(pos-1);
+      jsonf << "\n";
+   }
 }
