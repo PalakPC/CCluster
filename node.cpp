@@ -6,18 +6,13 @@
 # include <set>
 # include "node.h"
 
-#define NINF -1
 
 std::unordered_map<std::string, Node> nodes;
-std::unordered_map<std::string, std::unordered_map<std::string, unsigned int>> matrix;
 std::unordered_set<std::string> p_input;
 std::unordered_set<std::string> p_output;
 std::vector<std::string> topological_order;
 std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
 std::vector<std::unordered_set<std::string>> fclusters;
-
-std::unordered_map<std::string,unsigned int>::iterator visited;
-std::unordered_map<std::string,unsigned int>::iterator ittemp;
 
 unsigned int max_delay;
 
@@ -158,19 +153,6 @@ void initialize()
    }
    
    topological_order.erase(topological_order.begin(), topological_order.begin() + p_input.size());
-}
-
-bool compareTwo (std::pair<std::pair<std::string, unsigned int>, unsigned int> a, std::pair<std::pair<std::string, unsigned int>, unsigned int> b)
-{
-   if (a.second == b.second)
-   {
-      return a.first.second < b.first.second;
-   }
-
-   else
-   {
-      return a.second > b.second;
-   }
 }
 
 void label_node(std::string cur_node)
