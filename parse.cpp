@@ -243,30 +243,54 @@ void cluster_json()
    jsonf << "\"nodes\": [\n";
 
    std::unordered_map<std::string, unsigned int> nodes_seen;
-   
-   for (auto it = final_clusters.begin(); it != final_clusters.end(); ++it)
+
+   if (post)
    {
-      for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+      for (unsigned int it = 0; it != fclusters.size(); ++it)
       {
-         auto got = nodes_seen.find(*it2);
-         if (got == nodes_seen.end())
+         for (auto it2 = fclusters[it].begin(); it2 != fclusters[it].end(); ++it2)
          {
-            nodes_seen.insert(std::make_pair(*it2, 1));
-            jsonf << "{\"id\": \"" << *it2 << "0\", \"group\": " << count << "},\n"; 
+            auto got = nodes_seen.find(*it2);
+            if (got == nodes_seen.end())
+            {
+               nodes_seen.insert(std::make_pair(*it2, 1));
+               jsonf << "{\"id\": \"" << *it2 << "0\", \"group\": " << count << "},\n"; 
+            }
+            else
+            {
+               jsonf << "{\"id\": \"" << *it2 << got->second << "\", \"group\": " << count << "},\n"; 
+               ++(got->second);
+            }
          }
-         else
-         {
-            jsonf << "{\"id\": \"" << *it2 << got->second << "\", \"group\": " << count << "},\n"; 
-            ++(got->second);
-         }
+         ++count;
       }
-      ++count;
+   }
+   else
+   {
+      for (auto it = final_clusters.begin(); it != final_clusters.end(); ++it)
+      {
+         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+         {
+            auto got = nodes_seen.find(*it2);
+            if (got == nodes_seen.end())
+            {
+               nodes_seen.insert(std::make_pair(*it2, 1));
+               jsonf << "{\"id\": \"" << *it2 << "0\", \"group\": " << count << "},\n"; 
+            }
+            else
+            {
+               jsonf << "{\"id\": \"" << *it2 << got->second << "\", \"group\": " << count << "},\n"; 
+               ++(got->second);
+            }
+         }
+         ++count;
+      }
    }
 
    long pos = jsonf.tellp();
    jsonf.seekp(pos-2);
    jsonf << "\n";
-   
+
    jsonf << "],\n";
 
    jsonf<<"\"links\": [\n";
@@ -285,7 +309,7 @@ void cluster_json()
          }
       }
    }
-   
+
    pos = jsonf.tellp();
    jsonf.seekp(pos-2);
    jsonf << "\n";

@@ -14,6 +14,7 @@ std::unordered_set<std::string> p_input;
 std::unordered_set<std::string> p_output;
 std::vector<std::string> topological_order;
 std::unordered_map<std::string, std::unordered_set<std::string>> final_clusters;
+std::vector<std::unordered_set<std::string>> fclusters;
 
 std::unordered_map<std::string,unsigned int>::iterator visited;
 std::unordered_map<std::string,unsigned int>::iterator ittemp;
@@ -285,4 +286,74 @@ void calculate_max_parameters()
 	}
 
 	std::cout << "Maximum delay:\t\t" << max_delay + 1 << "\n";
+}
+
+void post_processing()
+{
+   unsigned int duplication = 0;
+   std::vector<std::unordered_set<std::string>> clusters;
+   std::vector<std::unordered_set<std::string>> buckets;
+
+   buckets.clear();
+
+   for (auto it = final_clusters.begin(); it != final_clusters.end(); ++it)
+   {
+      if (it->second.size() < size_constraint)
+      {
+         clusters.push_back(it->second);
+      }
+      else
+      {
+         fclusters.push_back(it->second);
+      }
+   }
+   
+   std::stable_sort(clusters.begin(), clusters.end(), [](const std::unordered_set<std::string> &a, const std::unordered_set<std::string> &b) { return a.size() > b.size(); });
+
+   for (unsigned int i = 0; i < clusters.size(); ++i)
+   {
+      bool flag = 0;
+      for (unsigned int it2 = 0; it2 < buckets.size(); ++it2)
+      {
+         if (clusters[i].size() + buckets[it2].size() <= size_constraint)
+         {
+            flag = 1;
+            for (auto it3 = clusters[i].begin(); it3 != clusters[i].end(); ++it3)
+            {
+               if (buckets[it2].insert(*it3).second == false)
+               {
+                  duplication++;
+               }
+            }
+            break;
+         }
+      }
+      if (!flag)
+      {
+         buckets.push_back(clusters[i]);
+      }
+   }
+
+   for (auto it = buckets.begin(); it != buckets.end(); ++it)
+   {
+      fclusters.push_back(*it);
+   }
+
+#  ifdef TEST
+   
+   std::cout << "Final optimized cluster list:\n";
+
+   for (unsigned int it = 0; it < fclusters.size(); ++it)
+   {
+      for (auto it2 = fclusters[it].begin(); it2 != fclusters[it].end(); ++it2)
+      {
+         std::cout << *it2 << " ";
+      }
+      std::cout << "\n";
+   }
+
+#  endif
+
+   std::cout << "Cluster count:\t\t\t" << fclusters.size() << "\n";
+   std::cout << "Duplicate nodes removed:\t" << duplication << "\n";
 }

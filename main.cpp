@@ -12,7 +12,8 @@ std::string file_name;
 unsigned int size_constraint = 8;
 unsigned int inter_cluster_delay = 3;
 unsigned int node_delay = 1;
-unsigned int json = 0;
+bool json = 0;
+bool post = 0;
 
 void showUsage() 
 {
@@ -21,12 +22,13 @@ void showUsage()
    printf("         -d <inter_cluster_delay, default 3>\n");
    printf("         -n <node_delay, default 1>\n");
    printf("         -j <generate json? yes (1) or no (0), default 0>\n");
+   printf("         -p <perform post-processing? yes (1) or no (0), default 0>\n");
 }
 
 int main(int argc, char *argv[])
 {
    int c;
-   while ((c = getopt(argc, argv, "s:d:n:j:")) != -1) 
+   while ((c = getopt(argc, argv, "s:d:n:j:p:")) != -1) 
    {
       switch (c) 
       {
@@ -41,6 +43,9 @@ int main(int argc, char *argv[])
             break;
          case 'j':
             json = atoi(optarg);
+            break;
+         case 'p':
+            post = atoi(optarg);
             break;
          default:
             showUsage();
@@ -180,6 +185,18 @@ int main(int argc, char *argv[])
    std::cout << "Number of clusters:\t" << final_clusters.size() << "\n";
    
    calculate_max_parameters();
+
+   if (post)
+   {
+      std::cout << "\nPost-processing\n\n";
+      start_time = std::chrono::high_resolution_clock::now();
+      
+      post_processing();
+      
+      end_time = std::chrono::high_resolution_clock::now();
+      span = end_time - start_time;
+      std::cout << "Time taken:\t\t\t" << span.count() << " s\n";
+   }
 
    if (json)
    {
