@@ -10,7 +10,7 @@ Rajaraman and Wong algorithm for optimum polynomial time clustering.
 * node.cpp: Contains all relevant functions used in the algorithm
 * node.h: Header file with class declaration and function definitions
 * sample.blif: Sample blif file we made, creates the DAG shown in Prof. Lim's book
-* \<xyz\>.blif: blif files provided
+* xyz.blif: blif files provided
 
 ## How to run
 
