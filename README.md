@@ -12,6 +12,7 @@ Rajaraman and Wong algorithm for optimum polynomial time clustering.
 * sample.blif:    Sample blif file we made, creates the DAG shown in Prof. Lim's book
 * xyz.blif:       blif files provided
 * xyz.json:       json files used for GUI
+* xyz.csv:        csv files used for GUI
 
 ## How to run
 
