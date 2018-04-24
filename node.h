@@ -27,6 +27,7 @@ extern std::unordered_set<std::string> p_input;
 extern std::unordered_set<std::string> p_output;
 extern std::unordered_map<std::string, Node> nodes;
 
+extern std::string file_name;
 extern unsigned int size_constraint;
 extern unsigned int inter_cluster_delay;
 extern unsigned int node_delay;
@@ -42,4 +43,7 @@ void create_labels();
 void label_node(std::string);
 void clustering();
 void calculate_max_parameters();
-void toposort(std::string node_name);
+
+void dag_json();
+void label_json();
+void cluster_json();
