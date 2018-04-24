@@ -31,6 +31,7 @@ void parsing(std::string file)
          if ((temp != "\\") && (it == nodes.end()))
          {
             Node a;
+            a.cluster.insert(temp);
             nodes.insert(std::make_pair(temp, a));
             p_input.insert(temp);
          }
@@ -76,13 +77,22 @@ void parsing(std::string file)
             if (got_out == nodes.end())
             {
                Node a;
+               a.cluster.insert(temp2);
                nodes.insert(std::make_pair(temp2, a));
+            }
+            else
+            {
+               got_out->second.cluster.insert(temp2);
             }
             
             auto it2 = p_input.find(temp2);
             if (it2 == p_input.end())
             {
                p_input.insert(temp2);
+            }
+            else
+            {
+               got_out->second.cluster.insert(temp2);
             }
 
             is.ignore(300,'\n');

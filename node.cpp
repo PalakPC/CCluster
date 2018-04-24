@@ -188,7 +188,7 @@ void label_node(std::string cur_node)
       S.push_back(std::make_pair(*it, label));
    }
 
-   std::sort(S.begin(), S.end(), compareTwo);
+   std::stable_sort(S.begin(), S.end(), [](const std::pair<std::pair<std::string, unsigned int>, unsigned int> &a, const std::pair<std::pair<std::string, unsigned int>, unsigned int> &b) { if (a.second == b.second) return a.first.second < b.first.second; else return a.second > b.second; });
 
    auto it = S.begin();
    for (unsigned int count = 0; (count < (size_constraint - 1)) && it != S.end(); ++count, ++it)
