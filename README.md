@@ -42,3 +42,57 @@ Now it will show the initial condition of nodes, topological order, codition of 
 I do not recommend doing this for any blif file other than sample.blif (unless you like your screen getting crowded with continuous printing :D).  
    
 Execution will get slower because of the printing, so be patient and enjoy the output :D.  
+
+////////////////////////////// GUI Demonstration ////////////////////////////////
+
+Minimum Requirements :-
+	•	Python: version 3.6 or higher
+	•	Import the following libraries:
+		o	Matplotlib: version 2.2.2 or higher
+		o	Networkx: version 2.1 or higher
+		o	Json and csv packages, if you still get an error message, although these packages are generally installed with the standard python packages
+/////////////////////////////////////////////////////////////////////////////////
+
+Note: Sample.blif is the blif file created for the sample circuit analysed in Page 3 of "Practical Problems in VLSI Physical Design Automation" by Prof. Sung-Kyu Lim
+
+To generate the json and csv files for sample.blif with size constraint 4 and default delay values, run the following command:
+	./ram_wong_clustering -s 4 -j 1 sample.blif
+
+********* Linux Machine Instructions **********************
+
+- Change Directory to the required path
+- Run the following commands to install the required packages:
+	pip install networkx
+	pip install matplotlib
+- Execute the following command to run the script:
+	python ./graphics.py
+	
+************ Windows Machine Instructions ******************
+
+- Use JetBrains PyCharm Community Edition 2017.3.4 as the IDE
+- Setup the libraries and Python Interpreter in the following manner:
+	* Go to File-> Settings-> Project: project_name
+	* Under this, select Project Interpreter	
+	* Make sure you have pip (> version 9.0.1) and setuptools (> 28.8.0) set up.
+	* Click on the + button in the right. 
+	* From this install the following packages:
+		-> Networkx
+		-> Matplotlib
+- Press run
+
+************** GUI Ouputs ***********************************
+	•	Dag.png : Shows the input to the clustering problem, i.e the DAG constructed from sample.blif
+	•	Matrix.html: Shows the Initialization matrix for the DAG in a tabular format
+	•	Label.png: Shows the label value associated with each node after Labeling phase
+	•	Cluster.png: Shows a pictorial representation of the clustering solution with each cluster represented with a different color.
+	•	Result.html: Tabular representation of the results of the algorithm
+	
+Note: Make sure the following files are in the same directory as the python script:
+	* sample.blif.dag.json
+	* sample.blif.label.json
+	* sample.blif.cluster.json
+	* sample.blif.matrix.csv
+	* sample.blif.result.csv
+
+	
+
