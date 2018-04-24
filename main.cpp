@@ -28,12 +28,12 @@ int main(int argc, char *argv[])
 
    if (argc >= 3)
    {
-   size_constraint = std::stoi(argv[2]);
+      size_constraint = std::stoi(argv[2]);
    }
 
    if (argc >= 4)
    {
-   inter_cluster_delay = std::stoi(argv[3]);
+      inter_cluster_delay = std::stoi(argv[3]);
    }
 
    if (argc == 5)
@@ -41,13 +41,20 @@ int main(int argc, char *argv[])
       node_delay = std::stoi(argv[4]);
    } 
 
+   std::cout << "Timings\n\n";
+
    std::chrono::high_resolution_clock::time_point start_time;
    std::chrono::high_resolution_clock::time_point end_time;
    std::chrono::duration<double> span;
    
    start_time = std::chrono::high_resolution_clock::now();
+   
    parsing(file_name);
-
+   
+   end_time = std::chrono::high_resolution_clock::now();
+   span = end_time - start_time;
+   std::cout << "DAG Formation:\t\t" << span.count() << " s\n";
+   
 #  ifdef TEST
 
    std::cout << "\nPrimary Inputs: ";
@@ -70,8 +77,14 @@ int main(int argc, char *argv[])
 
 #  endif
 
-   topological_sort();
+   start_time = std::chrono::high_resolution_clock::now();
 
+   topological_sort();
+   
+   end_time = std::chrono::high_resolution_clock::now();
+   span = end_time - start_time;
+   std::cout << "Topological Sorting:\t" << span.count() << " s\n";
+   
 #  ifdef TEST
 
    std::cout << "Topological Order\n";
@@ -83,7 +96,13 @@ int main(int argc, char *argv[])
 
 #  endif
    
+   start_time = std::chrono::high_resolution_clock::now();
+   
    initialize();
+   
+   end_time = std::chrono::high_resolution_clock::now();
+   span = end_time - start_time;
+   std::cout << "Matrix Formation:\t" << span.count() << " s\n";
 
 #  ifdef TEST
 
@@ -98,22 +117,19 @@ int main(int argc, char *argv[])
 	}
    
 #  endif
-  
-   end_time = std::chrono::high_resolution_clock::now();
-   span = end_time - start_time;
-   std::cout << "Matrix Formation: " << span.count() << "\n";
    
    start_time = std::chrono::high_resolution_clock::now();
+   
    create_labels();
+   
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   std::cout << "Labelling: " << span.count() << "\n";
+   std::cout << "Labelling:\t\t" << span.count() << " s\n";
 
 #  ifdef TEST
 
    for (auto it = nodes.begin(); it != nodes.end(); ++it)
    {
-//      std::cout << it->first <<":"<<it->second.label<< "\n";
       std::cout << it->first << "\n";
       it->second.print_node();
    }
@@ -122,10 +138,12 @@ int main(int argc, char *argv[])
 
    
    start_time = std::chrono::high_resolution_clock::now();
+   
    clustering();
+   
    end_time = std::chrono::high_resolution_clock::now();
    span = end_time - start_time;
-   std::cout << "Clustering: " << span.count() << "\n";
+   std::cout << "Clustering:\t\t" << span.count() << " s\n";
 
 #  ifdef TEST
 
@@ -141,10 +159,10 @@ int main(int argc, char *argv[])
 
 #  endif
    
-   std::cout << "Number of nodes: "<< nodes.size() << "\n"; 
-   std::cout << "Number of clusters: " << final_clusters.size() << "\n";
+   std::cout << "\nNumber of nodes:\t"<< nodes.size() << "\n"; 
+   std::cout << "Number of clusters:\t" << final_clusters.size() << "\n";
    
-   //calculate_max_parameters();
+   calculate_max_parameters();
    
    return 0;
 }

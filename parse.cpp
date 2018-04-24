@@ -127,7 +127,6 @@ void parsing(std::string file)
                   if ((got == p_output.end()) && (got2 == p_input.end()))
                   {
                      nodes.find(*it)->second.output.insert(std::make_pair(inputs[inputs.size() - 1], node_delay));
-                     nodes.find(*it)->second.orig_output.insert(inputs[inputs.size() - 1]);
                      nodes.find(inputs[inputs.size() - 1])->second.input.insert(std::make_pair(*it, node_delay));
                      nodes.find(inputs[inputs.size() - 1])->second.orig_input.insert(*it);
                   }

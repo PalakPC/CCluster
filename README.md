@@ -19,7 +19,7 @@ Follow the following steps for execution:
 * Run "cmake ." (without the quotes, obviously, duh) to generate makefile
 * Run "make" to generate executable. It is called "ram_wong_clustering" (long name, I know, sorry, bugged me too :D)
 * Use the following command to execute
-  * "./ram_wong_clustering <file_name required> <size_constraint optional, default 8> <inter_cluster_delay optional, default 3> <node_delay optional, default 1>"
+  * "./ram_wong_clustering <file_name required> <size_constraint optional, default 8> <node_delay optional, default 1>"
 
 The code will execute (don't rush, it may take about a minute and half for the biggest blif in the folder) and display the timings (in seconds) for different steps of algorithm.  
    

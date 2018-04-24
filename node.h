@@ -14,7 +14,6 @@ class Node
    public: 
       unsigned int label;
       std::unordered_set<std::string> orig_input;
-      std::unordered_set<std::string> orig_output;
       std::unordered_map<std::string, unsigned int> input;
       std::unordered_map<std::string, unsigned int> output;
       std::unordered_set<std::string> cluster;
@@ -42,4 +41,3 @@ void create_labels();
 void label_node(std::string);
 void clustering();
 void calculate_max_parameters();
-void toposort(std::string node_name);

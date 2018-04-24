@@ -4,7 +4,6 @@
 
 # include <queue> 
 # include <set>
-# include <map>
 # include "node.h"
 
 #define NINF -1
@@ -42,12 +41,6 @@ void Node::print_node()
       std::cout << *i << ' ';
    }
    
-   std::cout << "\nOriginal Outputs: ";
-   for (auto i = orig_output.begin(); i != orig_output.end(); ++i)
-   {
-      std::cout << *i << ' ';
-   }
-
    std::cout << "\nOutputs: ";
    for (auto i = output.begin(); i != output.end(); ++i)
    {
@@ -276,22 +269,14 @@ void clustering()
 void calculate_max_parameters()
 {
 	unsigned int max_delay = 0;
-	std::unordered_set<std::string> max_path;
 
 	for (auto itr = nodes.begin(); itr != nodes.end(); itr++)
 	{
 		if ((*itr).second.label > max_delay)
 		{
 			max_delay = (*itr).second.label;
-			max_path = (*itr).second.cluster;
 		}			
 	}
 
-	std::cout << "The maximum delay: " << max_delay << "\n";
-	std::cout << "The cluster with max delay: ";
-	for (auto itr = max_path.begin(); itr != max_path.end(); itr++)
-	{
-		std::cout << *itr << " ";
-	}
-   std::cout << "\n";
+	std::cout << "Maximum delay:\t\t" << max_delay + 1 << "\n";
 }
