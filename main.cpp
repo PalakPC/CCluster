@@ -2,6 +2,7 @@
  * Main
  */
 
+# include <unistd.h>
 # include <ctime>
 # include <chrono>
 
@@ -12,9 +13,49 @@ unsigned int size_constraint = 8;
 unsigned int inter_cluster_delay = 3;
 unsigned int node_delay = 1;
 
+void showUsage() 
+{
+   printf("Usage: ./ram_wong_clustering [options] <blif file>\n");
+   printf("Options: -s <size_constraint, default 8>\n");
+   printf("         -d <inter_cluster_delay, default 3>\n");
+   printf("         -n <node_delay, default 1>\n");
+}
+
 int main(int argc, char *argv[])
 {
-   if ((argc < 2) || (argc > 5))
+   int c;
+   while ((c = getopt(argc, argv, "s:d:n:")) != -1) 
+   {
+      switch (c) 
+      {
+         case 's':
+            size_constraint = atoi(optarg);
+            break;
+         case 'd':
+            inter_cluster_delay = atoi(optarg);
+            break;
+         case 'n':
+            node_delay = atoi(optarg);
+            break;
+         case '?':
+         case 'h':
+         default:
+            showUsage();
+            exit(1);
+      }
+   }
+
+   if (optind < argc) 
+   {
+      file_name = argv[optind];
+   } 
+   else 
+   {
+      showUsage();
+      exit(1);
+   }
+
+/*   if ((argc < 2) || (argc > 5))
    {
       std::cout << "File name not specified.\nUse proper execution format:\n" \
          << "./ram_wong_clustering <file_name required> " \
@@ -40,7 +81,7 @@ int main(int argc, char *argv[])
    {
       node_delay = std::stoi(argv[4]);
    } 
-
+*/
    std::cout << "Timings\n\n";
 
    std::chrono::high_resolution_clock::time_point start_time;
