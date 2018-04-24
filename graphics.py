@@ -25,90 +25,49 @@ def DrawGraph(filename,output_file,x):
     plt.savefig(output_file) # save as png
     #plt.show() # display
 
+def CreateTable(filename, output_file):
+    # initializing the titles and rows list
+    fields = []
+    rows = []
+    htmlfile = open(output_file, "w")
+    # initialize rownum variable
+    rownum = 0
+
+    # write <table> tag
+
+    htmlfile.write('<table border="1">')
+    # reading csv file
+    with open(filename, 'r') as csvfile:
+        # creating a csv reader object
+        reader = csv.reader(csvfile)
+
+        # extracting field names through first row
+        # fields = next(reader)
+        for row in reader:  # Read a single row from the CSV file
+
+            # write header row. assumes first row in csv contains header
+            if rownum == 0:
+                htmlfile.write('<tr>')  # write <tr> tag
+                for column in row:
+                    htmlfile.write('<th>' + column + '</th>')
+                htmlfile.write('</tr>')
+
+            # write all other rows
+            else:
+                htmlfile.write('<tr>')
+                for column in row:
+                    htmlfile.write('<td>' + column + '</td>')
+                htmlfile.write('</tr>')
+
+            # increment row count
+            rownum += 1
+
+            # write </table> tag
+    htmlfile.write('</table>')
+
+
 DrawGraph("sample.blif.dag.json","dag.png",1);
 DrawGraph("sample.blif.label.json","label.png",2);
 DrawGraph("sample.blif.cluster.json","cluster.png",3);
-
-# csv file name
-filename = "sample.blif.matrix.csv"
-
-# initializing the titles and rows list
-fields = []
-rows = []
-htmlfile = open("matrix.html", "w")
-# initialize rownum variable
-rownum = 0
-
- # write <table> tag
-
-htmlfile.write('<table border="1">')
-# reading csv file
-with open(filename, 'r') as csvfile:
-    # creating a csv reader object
-    reader = csv.reader(csvfile)
-
-    # extracting field names through first row
-    #fields = next(reader)
-    for row in reader:  # Read a single row from the CSV file
-
-        # write header row. assumes first row in csv contains header
-        if rownum == 0:
-            htmlfile.write('<tr>')  # write <tr> tag
-            for column in row:
-                htmlfile.write('<th>' + column + '</th>')
-            htmlfile.write('</tr>')
-
-        # write all other rows
-        else:
-            htmlfile.write('<tr>')
-            for column in row:
-                htmlfile.write('<td>' + column + '</td>')
-            htmlfile.write('</tr>')
-
-        # increment row count
-        rownum += 1
-
-        # write </table> tag
-htmlfile.write('</table>')
-
-# csv file name
-filename = "sample.blif.result.csv"
-
-# initializing the titles and rows list
-fields = []
-rows = []
-htmlfile = open("result.html", "w")
-# initialize rownum variable
-rownum = 0
-
- # write <table> tag
-
-htmlfile.write('<table border="1">')
-# reading csv file
-with open(filename, 'r') as csvfile:
-    # creating a csv reader object
-    reader = csv.reader(csvfile)
-
-    # extracting field names through first row
-    #fields = next(reader)
-    for row in reader:  # Read a single row from the CSV file
-
-        # write header row. assumes first row in csv contains header
-        if rownum == 0:
-            htmlfile.write('<tr>')  # write <tr> tag
-            for column in row:
-                htmlfile.write('<th>' + column + '</th>')
-            htmlfile.write('</tr>')
-
-        # write all other rows
-        else:
-            htmlfile.write('<tr>')
-            for column in row:
-                htmlfile.write('<td>' + column + '</td>')
-            htmlfile.write('</tr>')
-
-        # increment row count
-        rownum += 1
-
-        # write </table> tag
-htmlfile.write('</table>')
+CreateTable("sample.blif.matrix.csv","matrix.html");
+CreateTable("sample.blif.result.csv","result.html");
